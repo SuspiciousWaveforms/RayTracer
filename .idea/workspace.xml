@@ -1,7 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="a494c3a1-af0c-4c22-b702-e7974a1787fc" name="Default Changelist" comment="" />
+    <list default="true" id="a494c3a1-af0c-4c22-b702-e7974a1787fc" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Ray.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Scene.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Shapes/Shape.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/Shapes/Sphere.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/RayTracer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/RayTracer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Vec.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Utilities/Vec.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -14,7 +23,11 @@
       </list>
     </option>
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="ProjectId" id="1bwuKZZdKZ8SxnUdRA5jGJ8WjmG" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -22,6 +35,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="android.sdk.path" value="$USER_HOME$/Android/Sdk" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../advent-of-code-2019" />
     <property name="project.structure.last.edited" value="Modules" />
@@ -114,21 +128,33 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="251" y="289" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1589555592588" />
+    <state x="1242" y="204" width="378" height="565" key="#com.intellij.ide.util.MemberChooser" timestamp="1589812177647">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="1242" y="204" width="378" height="565" key="#com.intellij.ide.util.MemberChooser/0.0.1920.1080@0.0.1920.1080" timestamp="1589812177647" />
     <state x="1279" y="419" width="312" height="206" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog" timestamp="1589556405834">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="1279" y="419" width="312" height="206" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1589556405834" />
-    <state x="735" y="216" width="428" height="503" key="FileChooserDialogImpl" timestamp="1589555605842">
+    <state x="733" y="198" width="428" height="503" key="FileChooserDialogImpl" timestamp="1589812329790">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state x="735" y="216" width="428" height="503" key="FileChooserDialogImpl/0.0.1920.1080@0.0.1920.1080" timestamp="1589555605842" />
+    <state x="733" y="198" width="428" height="503" key="FileChooserDialogImpl/0.0.1920.1080@0.0.1920.1080" timestamp="1589812329790" />
+    <state x="614" y="355" key="com.intellij.ide.util.TipDialog" timestamp="1589806521119">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="614" y="355" key="com.intellij.ide.util.TipDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1589806521119" />
     <state x="1058" y="197" width="753" height="651" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser" timestamp="1589559773318">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="1058" y="197" width="753" height="651" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1920.1080@0.0.1920.1080" timestamp="1589559773318" />
-    <state width="300" height="36" key="javadoc.popup.new" timestamp="1589561652016">
+    <state width="300" height="36" key="javadoc.popup.new" timestamp="1589812420501">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="300" height="36" key="javadoc.popup.new/0.0.1920.1080@0.0.1920.1080" timestamp="1589561652016" />
+    <state width="300" height="36" key="javadoc.popup.new/0.0.1920.1080@0.0.1920.1080" timestamp="1589812420501" />
+    <state x="623" y="246" width="672" height="678" key="search.everywhere.popup" timestamp="1589810453229">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="623" y="246" width="672" height="678" key="search.everywhere.popup/0.0.1920.1080@0.0.1920.1080" timestamp="1589810453229" />
   </component>
 </project>

@@ -1,6 +1,7 @@
-class Vec {
+package main.java.Utilities;
+public class Vec {
 
-    public double x, y, z;
+    private double x, y, z;
 
     public Vec() {
         x = 0;
@@ -15,9 +16,9 @@ class Vec {
     }
 
     public Vec(Vec v) {
-        x = v.x;
-        y = v.y;
-        z = v.z;
+        x = v.getX();
+        y = v.getY();
+        z = v.getZ();
     }
 
     public void normalize() {
@@ -28,11 +29,7 @@ class Vec {
     }
 
     public double dotProduct(Vec v) {
-        x = x * v.x;
-        y = y * v.y;
-        z = z * v.z;
-
-        return x + y + z;
+        return (x * v.getX()) + (y * v.getY()) + (z * v.getZ());
     }
 
     public void crossProduct(Vec v) {
@@ -58,4 +55,16 @@ class Vec {
         y = y - v.y;
         z = z - v.z;
     }
+
+    public double getX() { return x; }
+
+    public double getY() { return y; }
+
+    public double getZ() { return z; }
+
+    public void setX(double x) { this.x = x; }
+
+    public void setY(double y) { this.y = y; }
+
+    public void setZ(double z) { this.z = z; }
 }
