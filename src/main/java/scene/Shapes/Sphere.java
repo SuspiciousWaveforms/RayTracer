@@ -1,4 +1,6 @@
 package main.java.scene.Shapes;
+import java.awt.Color;
+
 import main.java.rays.Ray;
 import main.java.rays.RayIntersections;
 import main.java.utilities.Vec;
@@ -7,7 +9,7 @@ public class Sphere extends Shape {
     private Vec center;
     private double radius;
 
-    public Sphere(Vec center, double radius) {
+    public Sphere(Vec center, double radius, Color color) {
         this.center = center;
         this.radius = radius;
     }

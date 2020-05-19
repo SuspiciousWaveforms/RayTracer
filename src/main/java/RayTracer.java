@@ -1,6 +1,7 @@
 package main.java;
 
 import java.awt.Color;
+import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.nio.Buffer;
@@ -13,6 +14,7 @@ import main.java.rays.Ray;
 import main.java.rays.RayIntersections;
 import main.java.scene.Scene;
 import main.java.scene.Shapes.Shape;
+import main.java.scene.Shapes.Sphere;
 import main.java.utilities.Vec;
 
 public class RayTracer extends JPanel {
@@ -20,7 +22,7 @@ public class RayTracer extends JPanel {
     private ArrayList<Shape> objects;
 
     Vec camera = new Vec(0, 0, 0);
-    Color backgroundColor = new Color(255,255,255);
+    Color backgroundColor = new Color(0,0,0);
 
     private int canvasWidth = 200;
     private int canvasHeight = 200;
@@ -28,15 +30,18 @@ public class RayTracer extends JPanel {
     private int viewportHeight = 1;
     private int distanceToViewport = 1;
     private int traceMin = 1;
-    private int traceMax = 10;
+    private int traceMax = 1000;
 
     private BufferedImage canvas;
     private Graphics2D g;
 
     public static void main(String[] args) {
         RayTracer rayTracer = new RayTracer();
-
         Scene scene = new Scene();
+
+        Vec center = new Vec(0, -1, 3);
+        Sphere sphere = new Sphere(center,1, Color.RED);
+        scene.addShape(sphere);
 
         rayTracer.objects = scene.getObjects();
 
@@ -44,7 +49,6 @@ public class RayTracer extends JPanel {
         Color color;
 
         rayTracer.canvas = new BufferedImage(rayTracer.canvasWidth, rayTracer.canvasHeight, BufferedImage.TYPE_INT_RGB);
-        rayTracer.g = (Graphics2D) rayTracer.canvas.getGraphics();
 
         for (int x = 0; x < rayTracer.canvasWidth; x++) {
             for (int y = 0; y < rayTracer.canvasHeight; y++) {
@@ -56,10 +60,14 @@ public class RayTracer extends JPanel {
         }
 
         JFrame frame = new JFrame();
+        frame.getContentPane().add(rayTracer);
         frame.setSize(rayTracer.canvasWidth, rayTracer.canvasHeight);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setVisible(true);
+    }
 
-        rayTracer.g.drawImage(rayTracer.canvas, rayTracer.canvasWidth, rayTracer.canvasHeight, null);
+    public void paint(Graphics g) {
+        g.drawImage(canvas, canvasWidth, canvasHeight, this);
     }
 
     // Determine the square on the viewport corresponding to a pixel.
@@ -76,17 +84,20 @@ public class RayTracer extends JPanel {
 
         for (Shape shape : objects) {
             rayIntersections = shape.checkIntersect(ray);
-            double intersection1 = rayIntersections.getIntersection1();
-            double intersection2 = rayIntersections.getIntersection2();
+            if (rayIntersections != null) {
+                double intersection1 = rayIntersections.getIntersection1();
+                double intersection2 = rayIntersections.getIntersection2();
 
-            if (intersection1 <= traceMin && intersection1 <= traceMax && intersection1 < closestIntersection) {
-               closestIntersection = intersection1;
-               closestShape = shape;
-            }
+                if (intersection1 <= traceMin && intersection1 <= traceMax && intersection1 < closestIntersection) {
+                    closestIntersection = intersection1;
+                    closestShape = shape;
+                }
 
-            if (intersection2 <= traceMin && intersection2 <= traceMax && intersection2 < closestIntersection) {
-                closestIntersection = intersection2;
-                closestShape = shape;
+                if (intersection2 <= traceMin && intersection2 <= traceMax && intersection2 < closestIntersection) {
+                    closestIntersection = intersection2;
+                    closestShape = shape;
+                }
+
             }
         }
 
