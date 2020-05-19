@@ -6,6 +6,11 @@ public class Ray {
     Vec origin;
     Vec direction;
 
+    public Ray(Vec origin, Vec direction) {
+        this.origin = origin;
+        this.direction = direction;
+    }
+
     public void setOrigin(Vec origin) {
         this.origin = origin;
     }

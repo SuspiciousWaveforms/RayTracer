@@ -1,18 +1,20 @@
 package main.java.scene.Shapes;
+import java.awt.Color;
+
 import main.java.rays.Ray;
 import main.java.rays.RayIntersections;
 import main.java.utilities.Vec;
 
 public abstract class Shape {
-    protected Vec color;
+    protected Color color;
 
     public abstract RayIntersections checkIntersect(Ray ray);
 
-    public void setColor(Vec color) {
+    public void setColor(Color color) {
         this.color = color;
     }
 
-    public Vec getColor() {
+    public Color getColor() {
         return color;
     }
 }
