@@ -12,7 +12,7 @@ public class Sphere extends Shape {
         return 0.0;
     }
 
-    public void setColour(Vec color) {
+    public void setColor(Vec color) {
         this.color = color;
     }
 
@@ -23,7 +23,6 @@ public class Sphere extends Shape {
     public void setRadius(double radius) {
         this.radius = radius;
     }
-
 
     public Vec getColor() {
         return color;
