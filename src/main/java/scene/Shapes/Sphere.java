@@ -36,20 +36,12 @@ public class Sphere extends Shape {
         return new RayIntersections(intersection1, intersection2);
     }
 
-    public void setColor(Vec color) {
-        this.color = color;
-    }
-
     public void setCenter(Vec center) {
         this.center = center;
     }
 
     public void setRadius(double radius) {
         this.radius = radius;
-    }
-
-    public Vec getColor() {
-        return color;
     }
 
     public Vec getCenter() {

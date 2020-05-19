@@ -7,4 +7,12 @@ public abstract class Shape {
     protected Vec color;
 
     public abstract RayIntersections checkIntersect(Ray ray);
+
+    public void setColor(Vec color) {
+        this.color = color;
+    }
+
+    public Vec getColor() {
+        return color;
+    }
 }
