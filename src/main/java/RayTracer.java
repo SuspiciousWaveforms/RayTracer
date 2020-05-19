@@ -7,6 +7,8 @@ import main.java.Utilities.Vec;
 
 public class RayTracer extends JPanel {
 
+    private ArrayList<Shape> objects;
+
     Vec camera = new Vec(0, 0, 0);
     private int canvasWidth = 200;
     private int canvasHeight = 200;
@@ -15,8 +17,11 @@ public class RayTracer extends JPanel {
     private int distanceToViewport = 1;
 
     public static void main(String[] args) {
+        RayTracer rayTracer = new RayTracer();
+
         Scene scene = new Scene();
-        ArrayList<Shape> shapes = scene.getObjects();
+
+        rayTracer.objects = scene.getObjects();
     }
 
     // Determine the square on the viewport corresponding to a pixel.
@@ -24,5 +29,9 @@ public class RayTracer extends JPanel {
         return new Vec(x * (double) viewportWidth / (double) canvasWidth,
                 y * (double) viewportHeight / (double) canvasHeight,
                 distanceToViewport);
+    }
+
+    public Vec traceRay(Vec origin, Vec direction, double traceMin, double traceMax) {
+        return new Vec(0,0,0);
     }
 }

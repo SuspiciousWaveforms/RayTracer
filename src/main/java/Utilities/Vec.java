@@ -38,22 +38,16 @@ public class Vec {
        z = z * v.z;
     }
 
-    public void scale(int factor) {
-        x = x * factor;
-        y = y * factor;
-        z = z * factor;
+    public Vec scale(int factor) {
+        return new Vec(x * factor, y * factor, z * factor);
     }
 
-    public void add(Vec v) {
-        x = x + v.x;
-        y = y + v.y;
-        z = z + v.z;
+    public Vec add(Vec v) {
+        return new Vec(x + v.getX(), y + v.getY(), z + v.getZ());
     }
 
-    public void sub(Vec v) {
-        x = x - v.x;
-        y = y - v.y;
-        z = z - v.z;
+    public Vec sub(Vec v) {
+        return new Vec(x - v.getX(), y - v.getY(), z - v.getZ());
     }
 
     public double getX() { return x; }

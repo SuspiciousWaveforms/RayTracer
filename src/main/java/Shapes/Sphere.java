@@ -3,12 +3,18 @@ import main.java.Ray;
 import main.java.Utilities.Vec;
 
 public class Sphere extends Shape {
-    private Vec color;
     private Vec center;
     private double radius;
 
+    public Sphere(Vec center, double radius) {
+        this.center = center;
+        this.radius = radius;
+    }
+
     @Override
     public double checkIntersect(Ray ray) {
+        Vec OC = ray.getOrigin().sub(center);
+
         return 0.0;
     }
 

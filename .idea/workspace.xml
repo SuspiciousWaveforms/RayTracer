@@ -3,8 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="a494c3a1-af0c-4c22-b702-e7974a1787fc" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Ray.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Ray.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/RayTracer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/RayTracer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Shapes/Shape.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Shapes/Shape.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Shapes/Sphere.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Shapes/Sphere.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Utilities/Vec.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utilities/Vec.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -146,10 +149,10 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="1056" y="179" width="753" height="651" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1920.1080@0.0.1920.1080" timestamp="1589886137997" />
-    <state width="300" height="36" key="javadoc.popup.new" timestamp="1589886654067">
+    <state width="300" height="36" key="javadoc.popup.new" timestamp="1589894468810">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="300" height="36" key="javadoc.popup.new/0.0.1920.1080@0.0.1920.1080" timestamp="1589886654067" />
+    <state width="300" height="36" key="javadoc.popup.new/0.0.1920.1080@0.0.1920.1080" timestamp="1589894468810" />
     <state x="1102" y="252" key="run.anything.popup" timestamp="1589880235990">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
