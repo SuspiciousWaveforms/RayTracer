@@ -1,13 +1,13 @@
 package main.java;
 
-import java.awt.Graphics;
-import java.awt.Image;
-import java.awt.image.BufferedImage;
-
-import javax.swing.JFrame;
+import java.util.ArrayList;
 import javax.swing.JPanel;
+import main.java.Shapes.Shape;
 
 public class RayTracer extends JPanel {
     public static void main(String[] args) {
+        Scene scene = new Scene();
+
+        ArrayList<Shape> shapes = scene.getObjects();
     }
 }

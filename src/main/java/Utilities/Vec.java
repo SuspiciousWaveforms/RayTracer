@@ -38,7 +38,7 @@ public class Vec {
        z = z * v.z;
     }
 
-    public void mult(int factor) {
+    public void scale(int factor) {
         x = x * factor;
         y = y * factor;
         z = z * factor;
