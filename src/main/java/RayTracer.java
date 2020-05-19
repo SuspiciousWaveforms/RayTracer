@@ -2,8 +2,10 @@ package main.java;
 
 import java.util.ArrayList;
 import javax.swing.JPanel;
-import main.java.Shapes.Shape;
-import main.java.Utilities.Vec;
+
+import main.java.scene.Scene;
+import main.java.scene.Shapes.Shape;
+import main.java.utilities.Vec;
 
 public class RayTracer extends JPanel {
 

@@ -1,7 +1,7 @@
-package main.java;
+package main.java.scene;
 
 import java.util.ArrayList;
-import main.java.Shapes.Shape;
+import main.java.scene.Shapes.Shape;
 
 public class Scene {
     ArrayList<Shape> objects = new ArrayList<>();

@@ -2,12 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="a494c3a1-af0c-4c22-b702-e7974a1787fc" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/src/main/java/rays/RayIntersections.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Ray.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Ray.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Ray.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/rays/Ray.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/RayTracer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/RayTracer.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Shapes/Shape.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Shapes/Shape.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Shapes/Sphere.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Shapes/Sphere.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Utilities/Vec.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Utilities/Vec.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Scene.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/scene/Scene.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Shapes/Shape.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/scene/Shapes/Shape.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Shapes/Sphere.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/scene/Shapes/Sphere.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Utilities/Vec.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/utilities/Vec.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,6 +45,13 @@
     <property name="project.structure.proportion" value="0.0" />
     <property name="project.structure.side.proportion" value="0.0" />
     <property name="settings.editor.selected.configurable" value="AndroidSdkUpdater" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="main.java" />
+      <recent name="main.java.Scene" />
+      <recent name="main.java.Rays" />
+    </key>
   </component>
   <component name="RunManager">
     <configuration name="&lt;template&gt;" type="Applet" default="true" selected="false">
@@ -137,6 +146,14 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="1279" y="419" width="312" height="206" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1920.1080@0.0.1920.1080" timestamp="1589556405834" />
+    <state x="1189" y="396" width="494" height="227" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes" timestamp="1589895920976">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="1189" y="396" width="494" height="227" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.classes/0.0.1920.1080@0.0.1920.1080" timestamp="1589895920976" />
+    <state x="1187" y="399" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.packages" timestamp="1589895944396">
+      <screen x="0" y="0" width="1920" height="1080" />
+    </state>
+    <state x="1187" y="399" key="#com.intellij.refactoring.move.moveClassesOrPackages.MoveClassesOrPackagesDialog.packages/0.0.1920.1080@0.0.1920.1080" timestamp="1589895944396" />
     <state x="733" y="198" width="428" height="503" key="FileChooserDialogImpl" timestamp="1589812329790">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
@@ -149,10 +166,10 @@
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
     <state x="1056" y="179" width="753" height="651" key="com.intellij.openapi.editor.actions.MultiplePasteAction$ClipboardContentChooser/0.0.1920.1080@0.0.1920.1080" timestamp="1589886137997" />
-    <state width="300" height="36" key="javadoc.popup.new" timestamp="1589894468810">
+    <state width="300" height="36" key="javadoc.popup.new" timestamp="1589896274654">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>
-    <state width="300" height="36" key="javadoc.popup.new/0.0.1920.1080@0.0.1920.1080" timestamp="1589894468810" />
+    <state width="300" height="36" key="javadoc.popup.new/0.0.1920.1080@0.0.1920.1080" timestamp="1589896274654" />
     <state x="1102" y="252" key="run.anything.popup" timestamp="1589880235990">
       <screen x="0" y="0" width="1920" height="1080" />
     </state>

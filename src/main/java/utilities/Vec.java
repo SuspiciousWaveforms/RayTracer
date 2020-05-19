@@ -1,4 +1,4 @@
-package main.java.Utilities;
+package main.java.utilities;
 public class Vec {
 
     private double x, y, z;

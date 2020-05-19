@@ -1,6 +1,6 @@
-package main.java;
+package main.java.rays;
 
-import main.java.Utilities.Vec;
+import main.java.utilities.Vec;
 
 public class Ray {
     Vec origin;
