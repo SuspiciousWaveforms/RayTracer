@@ -12,6 +12,7 @@ public class Sphere extends Shape {
     public Sphere(Vec center, double radius, Color color) {
         this.center = center;
         this.radius = radius;
+        this.color = color;
     }
 
     @Override
@@ -24,7 +25,7 @@ public class Sphere extends Shape {
 
         k1 = rayDirection.dotProduct(rayDirection);
         k2 = 2 * OC.dotProduct(rayDirection);
-        k3 = OC.dotProduct(OC);
+        k3 = OC.dotProduct(OC) - (radius * radius);
 
         discriminant = (k2 * k2) - (4 * k1 * k3);
 

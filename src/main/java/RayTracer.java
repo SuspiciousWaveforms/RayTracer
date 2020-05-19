@@ -22,26 +22,29 @@ public class RayTracer extends JPanel {
     private ArrayList<Shape> objects;
 
     Vec camera = new Vec(0, 0, 0);
-    Color backgroundColor = new Color(0,0,0);
+    Color backgroundColor = new Color(255,255,255);
 
-    private int canvasWidth = 200;
-    private int canvasHeight = 200;
-    private int viewportWidth = 1;
-    private int viewportHeight = 1;
+    private int canvasWidth = 300;
+    private int canvasHeight = 300;
+    private int viewportWidth = 2;
+    private int viewportHeight = 2;
     private int distanceToViewport = 1;
     private int traceMin = 1;
     private int traceMax = 1000;
 
     private BufferedImage canvas;
-    private Graphics2D g;
 
     public static void main(String[] args) {
         RayTracer rayTracer = new RayTracer();
         Scene scene = new Scene();
 
-        Vec center = new Vec(0, -1, 3);
+        Vec center = new Vec(1, 1, 4);
         Sphere sphere = new Sphere(center,1, Color.RED);
         scene.addShape(sphere);
+
+        Vec center2 = new Vec(2, 1.5, 3);
+        Sphere sphere2 = new Sphere(center2,1, Color.BLUE);
+        scene.addShape(sphere2);
 
         rayTracer.objects = scene.getObjects();
 
@@ -88,12 +91,12 @@ public class RayTracer extends JPanel {
                 double intersection1 = rayIntersections.getIntersection1();
                 double intersection2 = rayIntersections.getIntersection2();
 
-                if (intersection1 <= traceMin && intersection1 <= traceMax && intersection1 < closestIntersection) {
+                if (intersection1 >= traceMin && intersection1 <= traceMax && intersection1 < closestIntersection) {
                     closestIntersection = intersection1;
                     closestShape = shape;
                 }
 
-                if (intersection2 <= traceMin && intersection2 <= traceMax && intersection2 < closestIntersection) {
+                if (intersection2 >= traceMin && intersection2 <= traceMax && intersection2 < closestIntersection) {
                     closestIntersection = intersection2;
                     closestShape = shape;
                 }
@@ -102,6 +105,7 @@ public class RayTracer extends JPanel {
         }
 
         if (closestShape == null) return backgroundColor;
-        else return closestShape.getColor();
+        else { return closestShape.getColor();
+        }
     }
 }
