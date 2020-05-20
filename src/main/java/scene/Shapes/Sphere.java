@@ -9,7 +9,7 @@ public class Sphere extends Shape {
     private Vec center;
     private double radius;
 
-    public Sphere(Vec center, double radius, Color color) {
+    public Sphere(Vec center, double radius, Vec color) {
         this.center = center;
         this.radius = radius;
         this.color = color;
@@ -39,19 +39,7 @@ public class Sphere extends Shape {
         return new RayIntersections(intersection1, intersection2);
     }
 
-    public void setCenter(Vec center) {
-        this.center = center;
-    }
-
-    public void setRadius(double radius) {
-        this.radius = radius;
-    }
-
     public Vec getCenter() {
         return center;
-    }
-
-    public double getRadius() {
-        return radius;
     }
 }

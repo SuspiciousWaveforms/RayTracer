@@ -32,19 +32,23 @@ public class Vec {
         return (x * v.getX()) + (y * v.getY()) + (z * v.getZ());
     }
 
+    public double length() {
+        return Math.sqrt(this.dotProduct(this));
+    }
+
 //    public void crossProduct(Vec v) {
 //       x = x * v.x;
 //       y = y * v.y;
 //       z = z * v.z;
 //    }
 
-//    public Vec scale(int factor) {
-//        return new Vec(x * factor, y * factor, z * factor);
-//    }
+    public Vec scale(double factor) {
+        return new Vec(x * factor, y * factor, z * factor);
+    }
 
-//    public Vec add(Vec v) {
-//        return new Vec(x + v.getX(), y + v.getY(), z + v.getZ());
-//    }
+    public Vec add(Vec v) {
+        return new Vec(x + v.getX(), y + v.getY(), z + v.getZ());
+    }
 
     public Vec sub(Vec v) {
         return new Vec(x - v.getX(), y - v.getY(), z - v.getZ());

@@ -11,14 +11,6 @@ public class Ray {
         this.direction = direction;
     }
 
-    public void setOrigin(Vec origin) {
-        this.origin = origin;
-    }
-
-    public void setDirection(Vec direction) {
-        this.direction = direction;
-    }
-
     public Vec getOrigin() {
         return origin;
     }

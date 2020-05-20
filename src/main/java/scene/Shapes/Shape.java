@@ -3,13 +3,14 @@ import java.awt.Color;
 
 import main.java.rays.Ray;
 import main.java.rays.RayIntersections;
+import main.java.utilities.Vec;
 
 public abstract class Shape {
-    protected Color color;
+    protected Vec color;
 
     public abstract RayIntersections checkIntersect(Ray ray);
 
-    public Color getColor() {
+    public Vec getColor() {
         return color;
     }
 }

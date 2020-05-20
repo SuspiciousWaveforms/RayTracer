@@ -10,18 +10,6 @@ public class RayIntersections {
         this.intersection2 = intersection2;
     }
 
-//    public boolean checkIntersection1InBounds(double intersectionMin, double intersectionMax) {
-//        return checkIntersectionInBounds(intersection1, intersectionMin, intersectionMax);
-//    }
-//
-//    public boolean checkIntersection2InBounds(double intersectionMin, double intersectionMax) {
-//        return checkIntersectionInBounds(intersection1, intersectionMin, intersectionMax);
-//    }
-//
-//    public boolean checkIntersectionInBounds(double intersection, double intersectionMin, double intersectionMax) {
-//        return intersection >= intersectionMin && intersection <= intersectionMax;
-//    }
-
     public double getIntersection1() {
         return intersection1;
     }
