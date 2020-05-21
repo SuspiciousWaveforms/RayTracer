@@ -7,4 +7,4 @@ A repository for my RayTracer.
 
 # Current Image
 
-[image.png](https://github.com/SuspiciousWaveforms/RayTracer/blob/master/image.jpg)
+![image.png](https://github.com/SuspiciousWaveforms/RayTracer/blob/master/image.jpg)
