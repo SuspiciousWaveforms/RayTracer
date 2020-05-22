@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.imageio.ImageIO;
-import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import main.java.light.Ambient;
@@ -23,23 +22,22 @@ import main.java.scene.Shapes.Sphere;
 import main.java.utilities.Vec;
 
 public class RayTracer extends JPanel {
+    private BufferedImage canvas;
 
     private ArrayList<Shape> objects;
     private ArrayList<Light> lights;
 
     Vec camera = new Vec(0, 0, 0);
-
     Vec backgroundColor = new Vec(255, 255, 255);
 
     private int canvasWidth = 600;
     private int canvasHeight = 600;
-    private int viewportWidth = 1;
-    private int viewportHeight = 1;
-    private int distanceToViewport = 1;
-    private int traceMin = 1;
-    private int traceMax = 10000;
+    private final int viewportWidth = 1;
+    private final int viewportHeight = 1;
+    private final int distanceToViewport = 1;
+    private final int traceMin = 1;
+    private final int traceMax = 1000000000;
 
-    private BufferedImage canvas;
 
     public static void main(String[] args) {
         RayTracer rayTracer = new RayTracer();
@@ -79,15 +77,16 @@ public class RayTracer extends JPanel {
         rayTracer.lights = scene.getLights();
         rayTracer.objects = scene.getObjects();
 
+        rayTracer.canvas = new BufferedImage(rayTracer.canvasWidth, rayTracer.canvasHeight, BufferedImage.TYPE_INT_RGB);
+
         Ray ray;
         Vec tempColor;
         int tempX, tempY, tempZ;
 
-        rayTracer.canvas = new BufferedImage(rayTracer.canvasWidth, rayTracer.canvasHeight, BufferedImage.TYPE_INT_RGB);
-
         for (int x = -(rayTracer.canvasWidth / 2) ; x < (rayTracer.canvasWidth / 2); x++) {
             for (int y = -(rayTracer.canvasHeight / 2); y < (rayTracer.canvasHeight / 2); y++) {
                 ray = new Ray(rayTracer.camera, rayTracer.canvasToViewport(x, y));
+
                 tempColor = rayTracer.traceRay(ray);
                 tempX = (int) tempColor.getX();
                 tempY = (int) tempColor.getY();
@@ -99,22 +98,12 @@ public class RayTracer extends JPanel {
             }
         }
 
-//        JFrame frame = new JFrame();
-//        frame.getContentPane().add(rayTracer);
-//        frame.setSize(rayTracer.canvasWidth, rayTracer.canvasHeight);
-//        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        frame.setVisible(true);
-
         File output = new File("image.jpg");
         try {
             ImageIO.write(rayTracer.canvas, "jpg", output);
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public void paint(Graphics g) {
-        g.drawImage(canvas, canvasWidth, canvasHeight, this);
     }
 
     // Determine the square on the viewport corresponding to a pixel.
@@ -134,31 +123,40 @@ public class RayTracer extends JPanel {
 
         for (Shape shape : objects) {
             rayIntersections = shape.checkIntersect(ray);
+
             if (rayIntersections != null) {
                 double intersection1 = rayIntersections.getIntersection1();
                 double intersection2 = rayIntersections.getIntersection2();
 
-                if (intersection1 >= traceMin && intersection1 <= traceMax && intersection1 < closestIntersection) {
+//                if (intersection1 >= traceMin && intersection1 <= traceMax && intersection1 < closestIntersection) {
+//                    closestIntersection = intersection1;
+//                    closestShape = shape;
+//                }
+//
+//                if (intersection2 >= traceMin && intersection2 <= traceMax && intersection2 < closestIntersection) {
+//                    closestIntersection = intersection2;
+//                    closestShape = shape;
+//                }
+
+                if (intersection1 < closestIntersection && traceMin < intersection1 && intersection1 < traceMax) {
                     closestIntersection = intersection1;
                     closestShape = shape;
                 }
 
-                if (intersection2 >= traceMin && intersection2 <= traceMax && intersection2 < closestIntersection) {
+                if (intersection2 < closestIntersection && traceMin < intersection2 && intersection2 < traceMax) {
                     closestIntersection = intersection2;
                     closestShape = shape;
                 }
-
             }
         }
 
         if (closestShape == null) return backgroundColor;
-        else {
-            point = origin.add(direction.scale(closestIntersection));
-            // Should not be hard coded to sphere.
-            normal = point.sub(((Sphere) closestShape).getCenter());
-            normal = normal.scale(1.0 / normal.length());
-            return closestShape.getColor().scale(computeLighting(point, normal));
-        }
+
+        point = origin.add(direction.scale(closestIntersection));
+        normal = point.sub(((Sphere) closestShape).getCenter());
+        normal = normal.scale(1.0 / normal.length());
+        return closestShape.getColor().scale(computeLighting(point, normal));
+//        return closestShape.getColor();
     }
 
     public double computeLighting(Vec point, Vec normal) {
@@ -170,8 +168,12 @@ public class RayTracer extends JPanel {
             if (light instanceof Ambient) {
                 i += light.getIntensity();
             } else {
-                if (light instanceof Point) l = (((Point) light).getPosition()).sub(point);
-                else l = ((Directional) light).getDirection();
+                if (light instanceof Point) {
+                    l = (((Point) light).getPosition()).sub(point);
+//                    System.out.println(l.getX() + "\n" + l.getY() + "\n" + l.getZ() + "\n");
+                } else {
+                    l = ((Directional) light).getDirection();
+                }
 
                 nDotL = normal.dotProduct(l);
 

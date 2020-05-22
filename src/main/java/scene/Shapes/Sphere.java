@@ -1,6 +1,4 @@
 package main.java.scene.Shapes;
-import java.awt.Color;
-
 import main.java.rays.Ray;
 import main.java.rays.RayIntersections;
 import main.java.utilities.Vec;
@@ -18,9 +16,9 @@ public class Sphere extends Shape {
     @Override
     public RayIntersections checkIntersect(Ray ray) {
         double k1, k2, k3, discriminant, intersection1, intersection2;
+
         Vec rayOrigin = ray.getOrigin();
         Vec rayDirection = ray.getDirection();
-
         Vec OC = rayOrigin.sub(center);
 
         k1 = rayDirection.dotProduct(rayDirection);
@@ -33,8 +31,8 @@ public class Sphere extends Shape {
             return null;
         }
 
-        intersection1 = (-k2 + Math.sqrt(discriminant) / (2 * k1));
-        intersection2 = (-k2 - Math.sqrt(discriminant) / (2 * k1));
+        intersection1 = (-k2 + Math.sqrt(discriminant)) / (2 * k1);
+        intersection2 = (-k2 - Math.sqrt(discriminant)) / (2 * k1);
 
         return new RayIntersections(intersection1, intersection2);
     }

@@ -36,12 +36,6 @@ public class Vec {
         return Math.sqrt(this.dotProduct(this));
     }
 
-//    public void crossProduct(Vec v) {
-//       x = x * v.x;
-//       y = y * v.y;
-//       z = z * v.z;
-//    }
-
     public Vec scale(double factor) {
         return new Vec(x * factor, y * factor, z * factor);
     }
