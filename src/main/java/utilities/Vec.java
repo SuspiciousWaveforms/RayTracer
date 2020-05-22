@@ -27,6 +27,15 @@ public class Vec {
 //        y = y / length;
 //        z = z / length;
 //    }
+    public Vec colorBind() {
+        double a, b, c;
+
+        a = Math.min(x, 255);
+        b = Math.min(y, 255);
+        c = Math.min(z, 255);
+
+        return new Vec(a, b, c);
+    }
 
     public double dotProduct(Vec v) {
         return (x * v.getX()) + (y * v.getY()) + (z * v.getZ());
