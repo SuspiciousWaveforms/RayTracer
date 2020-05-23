@@ -99,9 +99,9 @@ public class RayTracer extends JPanel {
             }
         }
 
-        File output = new File("image.jpg");
+            File output = new File("image.png");
         try {
-            ImageIO.write(rayTracer.canvas, "jpg", output);
+            ImageIO.write(rayTracer.canvas, "png", output);
         } catch (IOException e) {
             e.printStackTrace();
         }
