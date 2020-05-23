@@ -1,7 +1,6 @@
 package main.java;
 
 import java.awt.Color;
-import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +28,7 @@ public class RayTracer extends JPanel {
     private ArrayList<Light> lights;
 
     Vec camera = new Vec(0, 0, 0);
-    Vec backgroundColor = new Vec(255, 255, 255);
+    Vec backgroundColor = new Vec(0, 0, 0);
 
     private int canvasWidth = 600;
     private int canvasHeight = 600;
@@ -38,6 +37,7 @@ public class RayTracer extends JPanel {
     private final int distanceToViewport = 1;
     private final int traceMin = 1;
     private final int traceMax = 1000000000;
+    private final int recursionDepth = 3;
 
 
     public static void main(String[] args) {
@@ -46,22 +46,22 @@ public class RayTracer extends JPanel {
 
         Vec center = new Vec(0, -1, 3);
         Vec color = new Vec(255, 0, 0);
-        Sphere sphere = new Sphere(center,1, color, 500);
+        Sphere sphere = new Sphere(center,1, color, 500, 0.2);
         scene.addShape(sphere);
 
         Vec center2 = new Vec(2, 0, 4);
         Vec color2 = new Vec(0, 0, 255);
-        Sphere sphere2 = new Sphere(center2,1, color2, 500);
+        Sphere sphere2 = new Sphere(center2,1, color2, 500, 0.3);
         scene.addShape(sphere2);
 
         Vec center3 = new Vec(-2, 0, 4);
         Vec color3 = new Vec(0, 255, 0);
-        Sphere sphere3 = new Sphere(center3,1, color3, 10);
+        Sphere sphere3 = new Sphere(center3,1, color3, 10, 0.4);
         scene.addShape(sphere3);
 
         Vec center4 = new Vec(0, -5001, 0);
         Vec color4 = new Vec(255, 255, 0);
-        Sphere sphere4 = new Sphere(center4,5000, color4, 1000);
+        Sphere sphere4 = new Sphere(center4,5000, color4, 1000, 0.5);
         scene.addShape(sphere4);
 
         Ambient ambientLight = new Ambient(0.2);
@@ -88,14 +88,11 @@ public class RayTracer extends JPanel {
             for (int y = -(rayTracer.canvasHeight / 2); y < (rayTracer.canvasHeight / 2); y++) {
                 ray = new Ray(rayTracer.camera, rayTracer.canvasToViewport(x, y));
 
-                tempColor = (rayTracer.traceRay(ray)).colorBind();
-                tempX = (int) tempColor.getX();
-                tempY = (int) tempColor.getY();
-                tempZ = (int) tempColor.getZ();
+                tempColor = (rayTracer.traceRay(ray, rayTracer.traceMin, rayTracer.traceMax, rayTracer.recursionDepth)).colorBind();
 
                 rayTracer.canvas.setRGB((rayTracer.canvasWidth / 2) + x,
                                          (rayTracer.canvasHeight / 2) - y - 1,
-                                            (new Color(tempX, tempY, tempZ)).getRGB());
+                                            (new Color((int) tempColor.getX(), (int) tempColor.getY(), (int) tempColor.getZ())).getRGB());
             }
         }
 
@@ -114,10 +111,12 @@ public class RayTracer extends JPanel {
                 distanceToViewport);
     }
 
-    public Vec traceRay(Ray ray) {
-        Vec point, normal;
+    public Vec traceRay(Ray ray, double traceMin, double traceMax, int recursionDepth) {
+        Vec point, normal, localColor, reflectedColor;
         Vec origin = ray.getOrigin();
         Vec direction = ray.getDirection();
+        double reflective;
+        Ray reflectedRay;
 
         Shape closestShape;
         double closestIntersection;
@@ -131,8 +130,19 @@ public class RayTracer extends JPanel {
         point = origin.add(direction.scale(closestIntersection));
         normal = point.sub(((Sphere) closestShape).getCenter());
         normal = normal.scale(1.0 / normal.length());
-        return closestShape.getColor().scale(computeLighting(point, normal, direction.scale(-1), closestShape.getSpecular()));
+        localColor = closestShape.getColor().scale(computeLighting(point, normal, direction.scale(-1), closestShape.getSpecular()));
+
+       reflective = closestShape.getReflective();
+       if (recursionDepth <= 0 || reflective <= 0) {
+           return localColor;
+       }
+
+       reflectedRay = new Ray(point, reflectRay(direction.scale(-1), normal));
+       reflectedColor = traceRay(reflectedRay, 0.001, traceMax, recursionDepth - 1);
+
+       return localColor.scale(1 - reflective).add(reflectedColor.scale(reflective));
     }
+
 
     public ShapeClosestIntersection getShapeClosestIntersection(Ray ray, double traceMin, double traceMax) {
         double closestIntersection = traceMax + 1;
@@ -160,6 +170,10 @@ public class RayTracer extends JPanel {
         return new ShapeClosestIntersection(closestShape, closestIntersection);
     }
 
+    public Vec reflectRay(Vec R, Vec N) {
+        return ((N.scale(2)).scale(N.dotProduct(R))).sub(R);
+    }
+
     public double computeLighting(Vec point, Vec normal, Vec view, int specular) {
         double i = 0.0;
         double nDotL, rDotV;
@@ -176,7 +190,6 @@ public class RayTracer extends JPanel {
             } else {
                 if (light instanceof Point) {
                     l = (((Point) light).getPosition()).sub(point);
-//                    System.out.println(l.getX() + "\n" + l.getY() + "\n" + l.getZ() + "\n");
                 } else {
                     l = ((Directional) light).getDirection();
                 }
@@ -194,7 +207,7 @@ public class RayTracer extends JPanel {
 
                     // Specular lighting.
                     if (specular != -1) {
-                        r = ((normal.scale(2)).scale(normal.dotProduct(l))).sub(l);
+                        r = reflectRay(l, normal);
                         rDotV = r.dotProduct(view);
 
                         if (rDotV > 0) {

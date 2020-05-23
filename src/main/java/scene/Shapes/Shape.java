@@ -7,6 +7,7 @@ import main.java.utilities.Vec;
 public abstract class Shape {
     protected Vec color;
     protected int specular;
+    protected double reflective;
 
     public abstract RayIntersections checkIntersect(Ray ray);
 
@@ -16,5 +17,9 @@ public abstract class Shape {
 
     public int getSpecular() {
        return specular;
+    }
+
+    public double getReflective() {
+        return reflective;
     }
 }
