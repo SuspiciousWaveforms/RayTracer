@@ -1,24 +1,18 @@
 package main.java.utilities;
 public class Vec {
 
-    private double x, y, z;
-
-    public Vec() {
-        x = 0;
-        y = 0;
-        z = 0;
-    }
+    private double[] vec = new double[3];
 
     public Vec(double x, double y, double z) {
-        this.x = x;
-        this.y = y;
-        this.z = z;
+        vec[0] = x;
+        vec[1] = y;
+        vec[2] = z;
     }
 
     public Vec(Vec v) {
-        x = v.getX();
-        y = v.getY();
-        z = v.getZ();
+        vec[0] = v.getX();
+        vec[1] = v.getY();
+        vec[2] = v.getZ();
     }
 
 //    public void normalize() {
@@ -28,38 +22,56 @@ public class Vec {
 //        z = z / length;
 //    }
     public Vec colorBind() {
-        double a, b, c;
+        double x, y, z;
 
-        a = Math.min(x, 255);
-        b = Math.min(y, 255);
-        c = Math.min(z, 255);
+        x = Math.min(vec[0], 255);
+        y = Math.min(vec[1], 255);
+        z = Math.min(vec[2], 255);
 
-        return new Vec(a, b, c);
+        return new Vec(x, y, z);
+    }
+
+    public Vec mxV(Vec[] matrix) {
+        double[] ans = {0, 0, 0};
+
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+               ans[i] += vec[j] * matrix[i].getN(j);
+            }
+        }
+
+        return new Vec(ans[0], ans[1], ans[2]);
     }
 
     public double dotProduct(Vec v) {
-        return (x * v.getX()) + (y * v.getY()) + (z * v.getZ());
+        return (vec[0] * v.getX()) + (vec[1] * v.getY()) + (vec[2] * v.getZ());
     }
 
     public double length() {
         return Math.sqrt(this.dotProduct(this));
     }
 
+
+
     public Vec scale(double factor) {
-        return new Vec(x * factor, y * factor, z * factor);
+        return new Vec(vec[0] * factor, vec[1] * factor, vec[2] * factor);
     }
 
     public Vec add(Vec v) {
-        return new Vec(x + v.getX(), y + v.getY(), z + v.getZ());
+        return new Vec(vec[0] + v.getX(), vec[1] + v.getY(), vec[2] + v.getZ());
     }
 
     public Vec sub(Vec v) {
-        return new Vec(x - v.getX(), y - v.getY(), z - v.getZ());
+        return new Vec(vec[0] - v.getX(), vec[1] - v.getY(), vec[2] - v.getZ());
     }
 
-    public double getX() { return x; }
+    public double getX() { return vec[0]; }
 
-    public double getY() { return y; }
+    public double getY() { return vec[1]; }
 
-    public double getZ() { return z; }
+    public double getZ() { return vec[2]; }
+
+    public double getN(int n) {
+        return vec[n];
+    }
 }

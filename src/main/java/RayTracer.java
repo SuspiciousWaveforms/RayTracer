@@ -27,7 +27,10 @@ public class RayTracer extends JPanel {
     private ArrayList<Shape> objects;
     private ArrayList<Light> lights;
 
-    Vec camera = new Vec(0, 0, 0);
+    Vec cameraDirection = new Vec(3, 0, 1);
+    Vec[] cameraRotation = {new Vec(0.7071, 0, -0.7071),
+                            new Vec(     0, 1,       0),
+                            new Vec(0.7071, 0,  0.7071)};
     Vec backgroundColor = new Vec(0, 0, 0);
 
     private int canvasWidth = 600;
@@ -39,9 +42,9 @@ public class RayTracer extends JPanel {
     private final int traceMax = 1000000000;
     private final int recursionDepth = 3;
 
-
     public static void main(String[] args) {
         RayTracer rayTracer = new RayTracer();
+
         Scene scene = new Scene();
 
         Vec center = new Vec(0, -1, 3);
@@ -82,11 +85,10 @@ public class RayTracer extends JPanel {
 
         Ray ray;
         Vec tempColor;
-        int tempX, tempY, tempZ;
 
         for (int x = -(rayTracer.canvasWidth / 2) ; x < (rayTracer.canvasWidth / 2); x++) {
             for (int y = -(rayTracer.canvasHeight / 2); y < (rayTracer.canvasHeight / 2); y++) {
-                ray = new Ray(rayTracer.camera, rayTracer.canvasToViewport(x, y));
+                ray = new Ray(rayTracer.cameraDirection, (rayTracer.canvasToViewport(x, y)).mxV(rayTracer.cameraRotation));
 
                 tempColor = (rayTracer.traceRay(ray, rayTracer.traceMin, rayTracer.traceMax, rayTracer.recursionDepth)).colorBind();
 

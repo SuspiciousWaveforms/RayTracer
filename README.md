@@ -13,6 +13,8 @@ This is a simple ray tracer using the Phong lighting model developed to learn mo
 - Ambient, point and directional lighting
 - Speculative reflection
 - Shadows
+- Reflection
+- Camera Rotation
 
 # Current Image
 
