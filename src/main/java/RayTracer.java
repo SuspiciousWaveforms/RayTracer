@@ -16,6 +16,7 @@ import main.java.light.Light;
 import main.java.light.Point;
 import main.java.rays.Ray;
 import main.java.rays.RayIntersections;
+import main.java.rays.ShapeClosestIntersection;
 import main.java.scene.Scene;
 import main.java.scene.Shapes.Shape;
 import main.java.scene.Shapes.Sphere;
@@ -114,12 +115,29 @@ public class RayTracer extends JPanel {
     }
 
     public Vec traceRay(Ray ray) {
-        double closestIntersection = traceMax + 1;
-        Shape closestShape = null;
-        RayIntersections rayIntersections;
         Vec point, normal;
         Vec origin = ray.getOrigin();
         Vec direction = ray.getDirection();
+
+        Shape closestShape;
+        double closestIntersection;
+        ShapeClosestIntersection shapeClosestIntersection = getShapeClosestIntersection(ray, traceMin, traceMax);
+
+        closestShape = shapeClosestIntersection.getShape();
+        closestIntersection = shapeClosestIntersection.getIntersection();
+
+        if (closestShape == null) return backgroundColor;
+
+        point = origin.add(direction.scale(closestIntersection));
+        normal = point.sub(((Sphere) closestShape).getCenter());
+        normal = normal.scale(1.0 / normal.length());
+        return closestShape.getColor().scale(computeLighting(point, normal, direction.scale(-1), closestShape.getSpecular()));
+    }
+
+    public ShapeClosestIntersection getShapeClosestIntersection(Ray ray, double traceMin, double traceMax) {
+        double closestIntersection = traceMax + 1;
+        Shape closestShape = null;
+        RayIntersections rayIntersections;
 
         for (Shape shape : objects) {
             rayIntersections = shape.checkIntersect(ray);
@@ -139,19 +157,18 @@ public class RayTracer extends JPanel {
                 }
             }
         }
-
-        if (closestShape == null) return backgroundColor;
-
-        point = origin.add(direction.scale(closestIntersection));
-        normal = point.sub(((Sphere) closestShape).getCenter());
-        normal = normal.scale(1.0 / normal.length());
-        return closestShape.getColor().scale(computeLighting(point, normal, direction.scale(-1), closestShape.getSpecular()));
+        return new ShapeClosestIntersection(closestShape, closestIntersection);
     }
 
     public double computeLighting(Vec point, Vec normal, Vec view, int specular) {
         double i = 0.0;
         double nDotL, rDotV;
         Vec l, r;
+
+        ShapeClosestIntersection shapeClosestIntersection;
+        Ray shadowRay;
+        Shape shadowSphere;
+
 
         for (Light light : lights) {
             if (light instanceof Ambient) {
@@ -164,19 +181,27 @@ public class RayTracer extends JPanel {
                     l = ((Directional) light).getDirection();
                 }
 
-                // Diffuse lighting.
-                nDotL = normal.dotProduct(l);
+                // Shadow check.
+                shadowRay = new Ray(point, l);
+                shapeClosestIntersection = getShapeClosestIntersection(shadowRay, 0.001, traceMax);
+                shadowSphere = shapeClosestIntersection.getShape();
 
-                if (nDotL > 0) i += (light.getIntensity()) * nDotL / (normal.length() * l.length());
+                if (shadowSphere == null) {
+                    // Diffuse lighting.
+                    nDotL = normal.dotProduct(l);
 
-                // Specular lighting.
-                if (specular !=  -1) {
-                    r = ((normal.scale(2)).scale(normal.dotProduct(l))).sub(l);
-                    rDotV = r.dotProduct(view);
+                    if (nDotL > 0) i += (light.getIntensity()) * nDotL / (normal.length() * l.length());
 
-                    if (rDotV > 0) {
-                        i += light.getIntensity() * Math.pow(rDotV / (r.length() * view.length()), specular);
+                    // Specular lighting.
+                    if (specular != -1) {
+                        r = ((normal.scale(2)).scale(normal.dotProduct(l))).sub(l);
+                        rDotV = r.dotProduct(view);
+
+                        if (rDotV > 0) {
+                            i += light.getIntensity() * Math.pow(rDotV / (r.length() * view.length()), specular);
+                        }
                     }
+
                 }
             }
         }
