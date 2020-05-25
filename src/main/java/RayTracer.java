@@ -27,10 +27,8 @@ public class RayTracer extends JPanel {
     private ArrayList<Shape> objects;
     private ArrayList<Light> lights;
 
-    Vec cameraDirection = new Vec(3, 0, 1);
-    Vec[] cameraRotation = {new Vec(0.7071, 0, -0.7071),
-                            new Vec(     0, 1,       0),
-                            new Vec(0.7071, 0,  0.7071)};
+    Vec cameraDirection;
+    Vec[] cameraRotation;
     Vec backgroundColor = new Vec(0, 0, 0);
 
     private int canvasWidth = 600;
@@ -43,64 +41,90 @@ public class RayTracer extends JPanel {
     private final int recursionDepth = 3;
 
     public static void main(String[] args) {
-        RayTracer rayTracer = new RayTracer();
-
-        Scene scene = new Scene();
-
-        Vec center = new Vec(0, -1, 3);
-        Vec color = new Vec(255, 0, 0);
-        Sphere sphere = new Sphere(center,1, color, 500, 0.2);
-        scene.addShape(sphere);
-
-        Vec center2 = new Vec(2, 0, 4);
-        Vec color2 = new Vec(0, 0, 255);
-        Sphere sphere2 = new Sphere(center2,1, color2, 500, 0.3);
-        scene.addShape(sphere2);
-
-        Vec center3 = new Vec(-2, 0, 4);
-        Vec color3 = new Vec(0, 255, 0);
-        Sphere sphere3 = new Sphere(center3,1, color3, 10, 0.4);
-        scene.addShape(sphere3);
-
-        Vec center4 = new Vec(0, -5001, 0);
-        Vec color4 = new Vec(255, 255, 0);
-        Sphere sphere4 = new Sphere(center4,5000, color4, 1000, 0.5);
-        scene.addShape(sphere4);
-
-        Ambient ambientLight = new Ambient(0.2);
-        scene.addLight(ambientLight);
-
-        Vec position = new Vec(2, 1, 0);
-        Point pointLight = new Point(0.6, position);
-        scene.addLight(pointLight);
-
-        Vec direction = new Vec(1, 4, 4);
-        Directional directionalLight = new Directional(0.2, direction);
-        scene.addLight(directionalLight);
-
-        rayTracer.lights = scene.getLights();
-        rayTracer.objects = scene.getObjects();
-
-        rayTracer.canvas = new BufferedImage(rayTracer.canvasWidth, rayTracer.canvasHeight, BufferedImage.TYPE_INT_RGB);
-
+        RayTracer rt = new RayTracer();
+        Camera camera;
+        Scene scene;
         Ray ray;
         Vec tempColor;
 
-        for (int x = -(rayTracer.canvasWidth / 2) ; x < (rayTracer.canvasWidth / 2); x++) {
-            for (int y = -(rayTracer.canvasHeight / 2); y < (rayTracer.canvasHeight / 2); y++) {
-                ray = new Ray(rayTracer.cameraDirection, (rayTracer.canvasToViewport(x, y)).mxV(rayTracer.cameraRotation));
 
-                tempColor = (rayTracer.traceRay(ray, rayTracer.traceMin, rayTracer.traceMax, rayTracer.recursionDepth)).colorBind();
+        // Specify the camera view.
+        rt.cameraDirection = new Vec(3, 0, 1);
+        rt.cameraRotation = new Vec[]{
+                new Vec(0.7071, 0, -0.7071),
+                new Vec(0, 1, 0),
+                new Vec(0.7071, 0, 0.7071)};
+        camera = new Camera(rt.cameraDirection, rt.cameraRotation);
 
-                rayTracer.canvas.setRGB((rayTracer.canvasWidth / 2) + x,
-                                         (rayTracer.canvasHeight / 2) - y - 1,
-                                            (new Color((int) tempColor.getX(), (int) tempColor.getY(), (int) tempColor.getZ())).getRGB());
+        scene = new Scene();
+
+        // Specify the objects in the scene.
+        scene.addShape(new Sphere(
+                new Vec(0, -1, 3),
+                1,
+                new Vec(255, 0, 0),
+                500,
+                0.2));
+
+        scene.addShape(new Sphere(
+                new Vec(2, 0, 4),
+                1,
+                new Vec(0, 0, 255),
+                500,
+                0.3));
+
+        scene.addShape(new Sphere(
+                new Vec(-2, 0, 4),
+                1,
+                new Vec(0, 255, 0),
+                10,
+                0.4));
+
+        scene.addShape(new Sphere(
+                new Vec(0, -5001, 0),
+                1,
+                new Vec(255, 255, 0),
+                1000,
+                0.5));
+
+
+        // Specify the lighting in the scene.
+        scene.addLight(new Ambient(0.2));
+        scene.addLight(new Point( 0.6, new Vec(2, 1, 0)));
+        scene.addLight(new Directional(0.2, new Vec(1, 4, 4)));
+
+        // Retrieve the lights and objects, and camera details..
+        rt.objects = scene.getObjects();
+        rt.lights = scene.getLights();
+
+        rt.cameraRotation = camera.getCameraRotation();
+        rt.cameraDirection = camera.getCameraDirection();
+
+        // Create the image to draw pixels on.
+        rt.canvas = new BufferedImage(rt.canvasWidth, rt.canvasHeight, BufferedImage.TYPE_INT_RGB);
+
+        // Draw the image.
+        for (int x = -(rt.canvasWidth / 2) ; x < (rt.canvasWidth / 2); x++) {
+            for (int y = -(rt.canvasHeight / 2); y < (rt.canvasHeight / 2); y++) {
+                ray = new Ray(rt.cameraDirection, (rt.canvasToViewport(x, y)).mxV(rt.cameraRotation));
+
+                tempColor = (rt.traceRay(ray, rt.traceMin, rt.traceMax, rt.recursionDepth)).colorBind();
+
+                rt.canvas.setRGB((
+                        rt.canvasWidth / 2) + x,
+                        (rt.canvasHeight / 2) - y - 1,
+                        (new Color(
+                                (int) tempColor.getX(),
+                                (int) tempColor.getY(),
+                                (int) tempColor.getZ())).getRGB());
             }
         }
 
-            File output = new File("image.png");
+        // Save the image to a file.
+        File output = new File("image.png");
+
         try {
-            ImageIO.write(rayTracer.canvas, "png", output);
+            ImageIO.write(rt.canvas, "png", output);
         } catch (IOException e) {
             e.printStackTrace();
         }
