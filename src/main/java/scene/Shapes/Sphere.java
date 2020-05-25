@@ -15,6 +15,7 @@ public class Sphere extends Shape {
         this.reflective = reflective;
     }
 
+    // Check where ray intersects with the sphere and return intersections if any.
     @Override
     public RayIntersections checkIntersect(Ray ray) {
         double k1, k2, k3, discriminant, intersection1, intersection2;

@@ -15,12 +15,6 @@ public class Vec {
         vec[2] = v.getZ();
     }
 
-//    public void normalize() {
-//        double length = Math.sqrt(x * x + y * y + z * z);
-//        x = x / length;
-//        y = y / length;
-//        z = z / length;
-//    }
     public Vec colorBind() {
         double x, y, z;
 
@@ -50,8 +44,6 @@ public class Vec {
     public double length() {
         return Math.sqrt(this.dotProduct(this));
     }
-
-
 
     public Vec scale(double factor) {
         return new Vec(vec[0] * factor, vec[1] * factor, vec[2] * factor);
