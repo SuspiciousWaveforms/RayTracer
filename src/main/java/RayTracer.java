@@ -15,7 +15,7 @@ import main.java.light.Light;
 import main.java.light.Point;
 import main.java.rays.Ray;
 import main.java.rays.RayIntersections;
-import main.java.rays.ShapeClosestIntersection;
+import main.java.rays.ClosestShapeIntersections;
 import main.java.scene.Scene;
 import main.java.scene.Shapes.Shape;
 import main.java.scene.Shapes.Sphere;
@@ -45,11 +45,15 @@ public class RayTracer extends JPanel {
         Vec tempColor;
 
         // Specify the camera view.
-        rt.cameraDirection = new Vec(3, 0, 1);
+        rt.cameraDirection = new Vec(0, 0, 0);
         rt.cameraRotation = new Vec[]{
                 new Vec(0.7071, 0, -0.7071),
                 new Vec(0, 1, 0),
                 new Vec(0.7071, 0, 0.7071)};
+//        rt.cameraRotation = new Vec[]{
+//                new Vec(0,0,0),
+//                new Vec(0,0,0),
+//                new Vec(0,0,0)};
         camera = new Camera(rt.cameraDirection, rt.cameraRotation);
 
         scene = new Scene();
@@ -60,28 +64,28 @@ public class RayTracer extends JPanel {
                 1,
                 new Vec(255, 0, 0),
                 500,
-                0.2));
+                0.2, 0.4));
 
         scene.addShape(new Sphere(
                 new Vec(2, 0, 4),
                 1,
                 new Vec(0, 0, 255),
                 500,
-                0.3));
+                0.3, 0));
 
         scene.addShape(new Sphere(
-                new Vec(-2, 0, 4),
+                new Vec(-0.5, 0, 4),
                 1,
                 new Vec(0, 255, 0),
                 10,
-                0.4));
+                0.4, 0));
 
         scene.addShape(new Sphere(
                 new Vec(0, -5001, 0),
                 5000,
                 new Vec(255, 255, 0),
                 1000,
-                0.5));
+                0.5, 0));
 
 
         // Specify the lighting in the scene.
@@ -102,7 +106,8 @@ public class RayTracer extends JPanel {
         // Draw the image.
         for (int x = -(rt.canvasWidth / 2) ; x < (rt.canvasWidth / 2); x++) {
             for (int y = -(rt.canvasHeight / 2); y < (rt.canvasHeight / 2); y++) {
-                ray = new Ray(rt.cameraDirection, (rt.canvasToViewport(x, y)).mxV(rt.cameraRotation));
+//                ray = new Ray(rt.cameraDirection, (rt.canvasToViewport(x, y)).mxV(rt.cameraRotation));
+                ray = new Ray(rt.cameraDirection, (rt.canvasToViewport(x, y)));
 
                 tempColor = (rt.traceRay(ray, rt.traceMin, rt.traceMax, rt.recursionDepth)).colorBind();
 
@@ -140,46 +145,59 @@ public class RayTracer extends JPanel {
 
     // Return a color for a pixel on the canvas.
     public Vec traceRay(Ray ray, double traceMin, double traceMax, int recursionDepth) {
-        ShapeClosestIntersection shapeClosestIntersection;
+        ClosestShapeIntersections closestShapeIntersections;
         Shape closestShape;
-        Vec point, normal, localColor, reflectedColor;
+        Vec closePoint, farPoint, closeNormal, farNormal, localColor;
+        Vec reflectedColor = new Vec(0,0,0);
+        Vec transparentColor = new Vec(0,0,0);
         Vec origin = ray.getOrigin();
         Vec direction = ray.getDirection();
-        Ray reflectedRay;
+        Ray reflectedRay, transparentRay;
 
         double reflective;
-        double closestIntersection;
+        double transparent;
+        double closeIntersection, farIntersection;
 
         // Retrieve the data on the closest shape.
-        shapeClosestIntersection = getShapeClosestIntersection(ray, traceMin, traceMax);
-        closestShape = shapeClosestIntersection.getShape();
-        closestIntersection = shapeClosestIntersection.getIntersection();
+        closestShapeIntersections = geteClosestShapeIntersection(ray, traceMin, traceMax);
+        closestShape = closestShapeIntersections.getShape();
+        closeIntersection = closestShapeIntersections.getCloseIntersection();
+        farIntersection = closestShapeIntersections.getFarIntersection();
 
         if (closestShape == null) return backgroundColor;
 
         // Compute lighting.
-        point = origin.add(direction.scale(closestIntersection));
-        normal = point.sub(((Sphere) closestShape).getCenter());
-        normal = normal.scale(1.0 / normal.length());
-        localColor = closestShape.getColor().scale(computeLighting(point, normal, direction.scale(-1), closestShape.getSpecular()));
+        closePoint = origin.add(direction.scale(closeIntersection));
+        closeNormal = closePoint.sub(((Sphere) closestShape).getCenter());
+        closeNormal = closeNormal.scale(1.0 / closeNormal.length());
+        localColor = closestShape.getColor().scale(computeLighting(closePoint, closeNormal, direction.scale(-1), closestShape.getSpecular()));
 
         reflective = closestShape.getReflective();
+        transparent = closestShape.getTransparent();
 
-        if (recursionDepth <= 0 || reflective <= 0) {
-            return localColor;
+//        if (recursionDepth <= 0 || reflective <= 0) return localColor;
+
+        if (recursionDepth > 0 && reflective > 0) {
+            // Compute reflection.
+            reflectedRay = new Ray(closePoint, reflectRay(direction.scale(-1), closeNormal));
+            reflectedColor = traceRay(reflectedRay, 0.001, traceMax, recursionDepth - 1);
         }
 
-        // Compute reflection.
-        reflectedRay = new Ray(point, reflectRay(direction.scale(-1), normal));
-        reflectedColor = traceRay(reflectedRay, 0.001, traceMax, recursionDepth - 1);
+        if (recursionDepth > 0 && transparent > 0) {
+            farPoint = origin.add(direction.scale(farIntersection));
+            farNormal = farPoint.sub(((Sphere) closestShape).getCenter());
+            transparentRay = new Ray(farNormal, direction);
+            transparentColor = traceRay(transparentRay, 0.001, traceMax, recursionDepth - 1);
+        }
 
-        return localColor.scale(1 - reflective).add(reflectedColor.scale(reflective));
+        return (localColor.scale(1 - reflective).add(reflectedColor.scale(reflective))).add(transparentColor.scale(transparent));
     }
 
 
     // Return a shape and the closest intersection of that shape and a ray.
-    public ShapeClosestIntersection getShapeClosestIntersection(Ray ray, double traceMin, double traceMax) {
-        double closestIntersection = traceMax + 1;
+    public ClosestShapeIntersections geteClosestShapeIntersection(Ray ray, double traceMin, double traceMax) {
+        double closeIntersection = traceMax + 1;
+        double farIntersection = traceMax + 1;
         Shape closestShape = null;
         RayIntersections rayIntersections;
 
@@ -190,18 +208,23 @@ public class RayTracer extends JPanel {
                 double intersection1 = rayIntersections.getIntersection1();
                 double intersection2 = rayIntersections.getIntersection2();
 
-                if (intersection1 >= traceMin && intersection1 <= traceMax && intersection1 < closestIntersection) {
-                    closestIntersection = intersection1;
+                if (intersection1 >= traceMin && intersection1 <= traceMax && intersection1 < closeIntersection) {
                     closestShape = shape;
+
+                    closeIntersection = intersection1;
+                    if (intersection2 <= traceMax) farIntersection = intersection2;
+
                 }
 
-                if (intersection2 >= traceMin && intersection2 <= traceMax && intersection2 < closestIntersection) {
-                    closestIntersection = intersection2;
+                if (intersection2 >= traceMin && intersection2 <= traceMax && intersection2 < closeIntersection) {
                     closestShape = shape;
+
+                    closeIntersection = intersection2;
+                    if (intersection2 <= traceMax) farIntersection = intersection1;
                 }
             }
         }
-        return new ShapeClosestIntersection(closestShape, closestIntersection);
+        return new ClosestShapeIntersections(closestShape, closeIntersection, farIntersection);
     }
 
     // Return direction vector for reflected ray.
@@ -211,7 +234,7 @@ public class RayTracer extends JPanel {
 
     // Compute the double to modify the lighting for a pixel to account for the lighting.
     public double computeLighting(Vec point, Vec normal, Vec view, int specular) {
-        ShapeClosestIntersection shapeClosestIntersection;
+        ClosestShapeIntersections closestShapeIntersections;
         Shape shadowSphere;
         Ray shadowRay;
         Vec l, r;
@@ -228,8 +251,8 @@ public class RayTracer extends JPanel {
 
                 // Shadow check
                 shadowRay = new Ray(point, l);
-                shapeClosestIntersection = getShapeClosestIntersection(shadowRay, 0.001, traceMax);
-                shadowSphere = shapeClosestIntersection.getShape();
+                closestShapeIntersections = geteClosestShapeIntersection(shadowRay, 0.001, traceMax);
+                shadowSphere = closestShapeIntersections.getShape();
 
                 if (shadowSphere == null) {
                     // Diffuse lighting.
