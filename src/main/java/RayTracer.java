@@ -63,29 +63,33 @@ public class RayTracer extends JPanel {
                 new Vec(0, -1, 3),
                 1,
                 new Vec(255, 0, 0),
-                500,
-                0.2, 0.4));
+                100000000,
+                0,
+                0.4));
 
         scene.addShape(new Sphere(
                 new Vec(2, 0, 4),
                 1,
                 new Vec(0, 0, 255),
                 500,
-                0.3, 0));
+                0.3,
+                0));
 
         scene.addShape(new Sphere(
-                new Vec(-0.5, 0, 4),
+                new Vec(-0.5, 0, 6),
                 1,
                 new Vec(0, 255, 0),
                 10,
-                0.4, 0));
+                0.4,
+                0));
 
         scene.addShape(new Sphere(
                 new Vec(0, -5001, 0),
                 5000,
                 new Vec(255, 255, 0),
                 1000,
-                0.5, 0));
+                0.5,
+                0));
 
 
         // Specify the lighting in the scene.
@@ -175,22 +179,20 @@ public class RayTracer extends JPanel {
         reflective = closestShape.getReflective();
         transparent = closestShape.getTransparent();
 
-//        if (recursionDepth <= 0 || reflective <= 0) return localColor;
-
+        // Compute reflection.
         if (recursionDepth > 0 && reflective > 0) {
-            // Compute reflection.
             reflectedRay = new Ray(closePoint, reflectRay(direction.scale(-1), closeNormal));
             reflectedColor = traceRay(reflectedRay, 0.001, traceMax, recursionDepth - 1);
         }
 
+        // Compute transparency.
         if (recursionDepth > 0 && transparent > 0) {
             farPoint = origin.add(direction.scale(farIntersection));
-            farNormal = farPoint.sub(((Sphere) closestShape).getCenter());
-            transparentRay = new Ray(farNormal, direction);
+            transparentRay = new Ray(farPoint, direction);
             transparentColor = traceRay(transparentRay, 0.001, traceMax, recursionDepth - 1);
         }
 
-        return (localColor.scale(1 - reflective).add(reflectedColor.scale(reflective))).add(transparentColor.scale(transparent));
+        return (localColor.scale(1 - reflective - transparent).add(reflectedColor.scale(reflective))).add(transparentColor.scale(transparent));
     }
 
 
@@ -212,7 +214,7 @@ public class RayTracer extends JPanel {
                     closestShape = shape;
 
                     closeIntersection = intersection1;
-                    if (intersection2 <= traceMax) farIntersection = intersection2;
+                    if (intersection2 >= traceMin && intersection2 <= traceMax) farIntersection = intersection2;
 
                 }
 
@@ -220,7 +222,7 @@ public class RayTracer extends JPanel {
                     closestShape = shape;
 
                     closeIntersection = intersection2;
-                    if (intersection2 <= traceMax) farIntersection = intersection1;
+                    if (intersection1 >= traceMin && intersection1 <= traceMax) farIntersection = intersection1;
                 }
             }
         }
