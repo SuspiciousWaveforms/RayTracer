@@ -1,8 +1,8 @@
-package main.java;
+package main.java.scene;
 
 import main.java.utilities.Vec;
 
-class Camera {
+public class Camera {
     Vec cameraDirection;
     Vec[] cameraRotation;
 

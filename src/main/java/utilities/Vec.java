@@ -37,6 +37,13 @@ public class Vec {
         return new Vec(ans[0], ans[1], ans[2]);
     }
 
+    public Vec normalise() {
+        double t = Math.sqrt((vec[0] * vec[0]) + (vec[1] * vec[1]) + (vec[2] * vec[2]));
+
+        if (t != 0) return new Vec(vec[0] / t, vec[1] / t, vec[2] / t);
+        else return new Vec(0, 0, 0);
+    }
+
     public double dotProduct(Vec v) {
         return (vec[0] * v.getX()) + (vec[1] * v.getY()) + (vec[2] * v.getZ());
     }
