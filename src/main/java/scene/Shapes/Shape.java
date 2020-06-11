@@ -9,6 +9,7 @@ public abstract class Shape {
     protected int specular;
     protected double reflective;
     protected double transparent;
+    protected double rIndex;
 
     public abstract RayIntersections checkIntersect(Ray ray);
 
@@ -26,5 +27,9 @@ public abstract class Shape {
 
     public double getTransparent() {
         return transparent;
+    }
+
+    public double getRIndex() {
+        return rIndex;
     }
 }

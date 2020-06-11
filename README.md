@@ -15,6 +15,7 @@ This is a simple ray tracer using the Phong lighting model developed to learn mo
 - Shadows
 - Reflection
 - Transparency
+- Refraction
 - Camera Rotation
 
 # Current Image
