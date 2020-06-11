@@ -223,7 +223,7 @@ public class RayTracer extends JPanel {
         }
 
         ClosestShapeIntersections closestShapeIntersectionsRefraction;
-        // Compute transparency (refraction).
+
         if (recursionDepth > 0 && transparent > 0) {
             refractedRay = new Ray(closePoint, refractRay(direction, closeNormal, rIndexAir, rIndex));
 
@@ -322,7 +322,6 @@ public class RayTracer extends JPanel {
                             i += light.getIntensity() * Math.pow(rDotV / (r.length() * view.length()), specular);
                         }
                     }
-
                 }
             }
         }
