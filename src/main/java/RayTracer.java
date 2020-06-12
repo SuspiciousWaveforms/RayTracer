@@ -253,8 +253,10 @@ public class RayTracer extends JPanel {
         localColor = closestShape.getColor().scale(computeLighting(closePoint, closeNormal, direction.scale(-1), closestShape.getSpecular()));
 
         if (closestShape.getTransparent()) {
-            reflective = reflectance(direction, closeNormal, rIndexAir, rIndex);
-            transparent = 1 - reflective;
+//            reflective = reflectance(direction, closeNormal, rIndexAir, rIndex);
+//            transparent = 1 - reflective;
+            transparent = reflectance(direction, closeNormal, rIndexAir, rIndex);
+            reflective = 1 - transparent;
         } else {
             reflective = closestShape.getReflective();
             transparent = 0;
