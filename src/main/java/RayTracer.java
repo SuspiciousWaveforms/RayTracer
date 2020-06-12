@@ -37,7 +37,7 @@ public class RayTracer extends JPanel {
     private final int traceMin = 1;
     private final int traceMax = 1000000000;
     private final int recursionDepth = 3;
-    private int rIndexAir = 1;
+    private final double rIndexAir = 1;
 
     public static void main(String[] args) {
         RayTracer rt = new RayTracer();
@@ -66,8 +66,8 @@ public class RayTracer extends JPanel {
                 0.5,
                 new Vec(255, 255, 255),
                 500,
-                0.3,
-                0.4,
+                0,
+                true,
                 1.5));
 
         scene.addShape(new Sphere(
@@ -76,7 +76,16 @@ public class RayTracer extends JPanel {
                 new Vec(255, 0, 0),
                 500,
                 0.3,
-                0,
+                false,
+                1));
+
+        scene.addShape(new Sphere(
+                new Vec(0.9, 0.9, 2),
+                0.3,
+                new Vec(255, 165, 0),
+                1000000,
+                0.3,
+                false,
                 1));
 
         scene.addShape(new Sphere(
@@ -85,7 +94,7 @@ public class RayTracer extends JPanel {
                 new Vec(255, 105, 180),
                 500,
                 0.3,
-                0,
+                false,
                 1));
 
         scene.addShape(new Sphere(
@@ -94,7 +103,7 @@ public class RayTracer extends JPanel {
                 new Vec(0, 128, 128),
                 500,
                 0.3,
-                0,
+                false,
                 1));
 
         scene.addShape(new Sphere(
@@ -103,7 +112,7 @@ public class RayTracer extends JPanel {
                 new Vec(0, 0, 255),
                 500,
                 0.3,
-                0,
+                false,
                 1));
 
         scene.addShape(new Sphere(
@@ -112,7 +121,16 @@ public class RayTracer extends JPanel {
                 new Vec(0, 255, 0),
                 500,
                 0.3,
-                0,
+                false,
+                1));
+
+        scene.addShape(new Sphere(
+                new Vec(-0.6, 1, 3),
+                0.4,
+                new Vec(255, 255, 255),
+                1000,
+                0.8,
+                false,
                 1));
 
         scene.addShape(new Sphere(
@@ -121,7 +139,7 @@ public class RayTracer extends JPanel {
                 new Vec(255, 255, 0),
                 100000000,
                 0,
-                0,
+                false,
                 1));
 
 
@@ -183,13 +201,14 @@ public class RayTracer extends JPanel {
     // Return a color for a pixel on the canvas.
     public Vec traceRay(Ray ray, double traceMin, double traceMax, int recursionDepth) {
         ClosestShapeIntersections closestShapeIntersections;
+        ClosestShapeIntersections closestShapeIntersectionsRefraction;
         Shape closestShape;
         Vec closePoint, farPoint, closeNormal, farNormal, localColor;
         Vec reflectedColor = new Vec(0,0,0);
         Vec transparentColor = new Vec(0,0,0);
         Vec origin = ray.getOrigin();
         Vec direction = ray.getDirection();
-        Ray reflectedRay, transparentRay, refractedRay;
+        Ray reflectedRay, refractedRay;
 
         double reflective;
         double rIndex = 1;
@@ -213,8 +232,15 @@ public class RayTracer extends JPanel {
         closeNormal = closeNormal.scale(1.0 / closeNormal.length());
         localColor = closestShape.getColor().scale(computeLighting(closePoint, closeNormal, direction.scale(-1), closestShape.getSpecular()));
 
-        reflective = closestShape.getReflective();
-        transparent = closestShape.getTransparent();
+        if (closestShape.getTransparent()) {
+            transparent = reflectance(direction, closeNormal, rIndexAir, rIndex);
+            reflective = 1 - transparent;
+        } else {
+            reflective = closestShape.getReflective();
+            transparent = 0;
+        }
+
+        // Use fresnel equations to calculate how reflective/refractive this is.
 
         // Compute reflection.
         if (recursionDepth > 0 && reflective > 0) {
@@ -222,8 +248,7 @@ public class RayTracer extends JPanel {
             reflectedColor = traceRay(reflectedRay, 0.001, traceMax, recursionDepth - 1);
         }
 
-        ClosestShapeIntersections closestShapeIntersectionsRefraction;
-
+        // Compute refraction.
         if (recursionDepth > 0 && transparent > 0) {
             refractedRay = new Ray(closePoint, refractRay(direction, closeNormal, rIndexAir, rIndex));
 
@@ -240,15 +265,30 @@ public class RayTracer extends JPanel {
         return (localColor.scale(1 - reflective - transparent).add(reflectedColor.scale(reflective))).add(transparentColor.scale(transparent));
     }
 
-    // Return direction vector for reflected ray.
-    public Vec reflectRay(Vec R, Vec N) {
-        return ((N.scale(2)).scale(N.dotProduct(R.scale(-1)))).add(R);
+    public double reflectance(Vec I, Vec N, double n1, double n2) {
+        double cosThetaI, cosThetaT, sin2t, rPerpendicular, rParallel;
+
+        cosThetaI = I.scale(-1).dotProduct(N);
+        sin2t = Math.pow((n1 / n2), 2) * (1 - Math.pow(cosThetaI, 2));
+        cosThetaT = Math.sqrt(1 - sin2t);
+
+        rPerpendicular = Math.pow(((n1 * cosThetaI) - (n2 * cosThetaT) / (n1 * cosThetaI) + (n2 * cosThetaT)), 2);
+        rParallel = Math.pow(((n2 * cosThetaI) - (n1 * cosThetaT) / (n2 * cosThetaI) + (n1 * cosThetaT)), 2);
+
+        return (rPerpendicular + rParallel) / 2;
     }
 
-    public Vec refractRay(Vec R, Vec N, double n1, double n2) {
-        double cosTheta = N.dotProduct(R.scale(-1));
+
+
+    // Return direction vector for reflected ray.
+    public Vec reflectRay(Vec I, Vec N) {
+        return ((N.scale(2)).scale(N.dotProduct(I.scale(-1)))).add(I);
+    }
+
+    public Vec refractRay(Vec I, Vec N, double n1, double n2) {
+        double cosTheta = N.dotProduct(I.scale(-1));
         double n = n1 / n2;
-        return R.scale(n).add(N.scale((n * cosTheta) - Math.sqrt(1 - (n * n * (1 - (cosTheta * cosTheta))))));
+        return I.scale(n).add(N.scale((n * cosTheta) - Math.sqrt(1 - (n * n * (1 - (cosTheta * cosTheta))))));
     }
 
     // Return the closest shape and the intersections of that shape and a ray.

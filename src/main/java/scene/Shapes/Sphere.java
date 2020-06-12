@@ -7,7 +7,7 @@ public class Sphere extends Shape {
     private Vec center;
     private double radius;
 
-    public Sphere(Vec center, double radius, Vec color, int specular, double reflective, double transparent, double rIndex) {
+    public Sphere(Vec center, double radius, Vec color, int specular, double reflective, boolean transparent, double rIndex) {
         this.center = center;
         this.radius = radius;
         this.color = color;

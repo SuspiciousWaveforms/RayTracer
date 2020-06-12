@@ -8,7 +8,7 @@ public abstract class Shape {
     protected Vec color;
     protected int specular;
     protected double reflective;
-    protected double transparent;
+    protected boolean transparent;
     protected double rIndex;
 
     public abstract RayIntersections checkIntersect(Ray ray);
@@ -25,7 +25,7 @@ public abstract class Shape {
         return reflective;
     }
 
-    public double getTransparent() {
+    public boolean getTransparent() {
         return transparent;
     }
 

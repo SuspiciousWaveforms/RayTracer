@@ -23,6 +23,7 @@ This is a simple ray tracer using the Phong lighting model developed to learn mo
 - Refraction
 
 ## Planned Features
+- Implementation of fresnel equations
 - Other shapes
 - Parallelization
 - Value of caching
