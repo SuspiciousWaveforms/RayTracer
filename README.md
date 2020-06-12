@@ -10,14 +10,27 @@ This is a simple ray tracer using the Phong lighting model developed to learn mo
 - https://graphics.stanford.edu/courses/cs148-10-summer/docs/2006--degreve--reflection_refraction.pdf
 
 # Features
+## Basic Features
 - Displaying spheres
 - Ambient, point and directional lighting
 - Speculative reflection
 - Shadows
 - Reflection
+- Camera Rotation
+
+## Additional Features
 - Transparency
 - Refraction
-- Camera Rotation
+
+## Planned Features
+- Other shapes
+- Parallelization
+- Value of caching
+- Shadow Optimisation
+- Optimisation using Bounding Volume Hierarchy to discard groups of objects
+- Subsampling
+- Super Sampling
+- Constructive solid geometry
 
 # Current Image
 
