@@ -48,14 +48,14 @@ public class RayTracer extends JPanel {
 
         // Specify the camera view.
         rt.cameraDirection = new Vec(0, 0, -1);
-        rt.cameraRotation = new Vec[]{
-                new Vec(0.7071, 0, -0.7071),
-                new Vec(0, 1, 0),
-                new Vec(0.7071, 0, 0.7071)};
 //        rt.cameraRotation = new Vec[]{
-//                new Vec(0,0,0),
-//                new Vec(0,0,0),
-//                new Vec(0,0,0)};
+//                new Vec(0.7071, 0, -0.7071),
+//                new Vec(0, 1, 0),
+//                new Vec(0.7071, 0, 0.7071)};
+        rt.cameraRotation = new Vec[]{
+                new Vec(0,0,0),
+                new Vec(0,0,0),
+                new Vec(0,0,0)};
         camera = new Camera(rt.cameraDirection, rt.cameraRotation);
 
         scene = new Scene();
@@ -136,7 +136,27 @@ public class RayTracer extends JPanel {
         scene.addShape(new Sphere(
                 new Vec(0, -5001, 0),
                 5000,
-                new Vec(255, 255, 0),
+                new Vec(204, 232, 255),
+                100000000,
+                0,
+                false,
+                1));
+
+//        // Right wall
+//        scene.addShape(new Sphere(
+//                new Vec(5004, 0, 0),
+//                5000,
+//                new Vec(204, 232, 255),
+//                100000000,
+//                0,
+//                false,
+//                1));
+
+        // Back wall
+        scene.addShape(new Sphere(
+                new Vec(0, 0, 5009),
+                5000,
+                new Vec(51, 65, 76),
                 100000000,
                 0,
                 false,
@@ -145,7 +165,7 @@ public class RayTracer extends JPanel {
 
         // Specify the lighting in the scene.
         scene.addLight(new Ambient(0.2));
-        scene.addLight(new Point( 0.6, new Vec(2, 1, 0)));
+        scene.addLight(new Point( 0.6, new Vec(2, 6, 0)));
         scene.addLight(new Directional(0.2, new Vec(1, 4, 4)));
 
         // Retrieve the lights and objects, and camera details..
@@ -233,14 +253,12 @@ public class RayTracer extends JPanel {
         localColor = closestShape.getColor().scale(computeLighting(closePoint, closeNormal, direction.scale(-1), closestShape.getSpecular()));
 
         if (closestShape.getTransparent()) {
-            transparent = reflectance(direction, closeNormal, rIndexAir, rIndex);
-            reflective = 1 - transparent;
+            reflective = reflectance(direction, closeNormal, rIndexAir, rIndex);
+            transparent = 1 - reflective;
         } else {
             reflective = closestShape.getReflective();
             transparent = 0;
         }
-
-        // Use fresnel equations to calculate how reflective/refractive this is.
 
         // Compute reflection.
         if (recursionDepth > 0 && reflective > 0) {
@@ -268,17 +286,17 @@ public class RayTracer extends JPanel {
     public double reflectance(Vec I, Vec N, double n1, double n2) {
         double cosThetaI, cosThetaT, sin2t, rPerpendicular, rParallel;
 
-        cosThetaI = I.scale(-1).dotProduct(N);
+        cosThetaI = N.dotProduct(I.scale(-1));
         sin2t = Math.pow((n1 / n2), 2) * (1 - Math.pow(cosThetaI, 2));
-        cosThetaT = Math.sqrt(1 - sin2t);
+        cosThetaT = Math.sqrt(1.0 - sin2t);
+
+        if (sin2t > 1.0) return 1.0;
 
         rPerpendicular = Math.pow(((n1 * cosThetaI) - (n2 * cosThetaT) / (n1 * cosThetaI) + (n2 * cosThetaT)), 2);
         rParallel = Math.pow(((n2 * cosThetaI) - (n1 * cosThetaT) / (n2 * cosThetaI) + (n1 * cosThetaT)), 2);
 
-        return (rPerpendicular + rParallel) / 2;
+        return (rPerpendicular + rParallel) / 2.0;
     }
-
-
 
     // Return direction vector for reflected ray.
     public Vec reflectRay(Vec I, Vec N) {
@@ -310,7 +328,6 @@ public class RayTracer extends JPanel {
 
                     closeIntersection = intersection1;
                     if (intersection2 >= traceMin && intersection2 <= traceMax) farIntersection = intersection2;
-
                 }
 
                 if (intersection2 >= traceMin && intersection2 <= traceMax && intersection2 < closeIntersection) {
