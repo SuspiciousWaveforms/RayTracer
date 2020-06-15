@@ -47,7 +47,7 @@ public class RayTracer extends JPanel {
         Vec tempColor;
 
         // Specify the camera view.
-        rt.cameraDirection = new Vec(0, 0, -1);
+        rt.cameraDirection = new Vec(0, 0, 0);
 //        rt.cameraRotation = new Vec[]{
 //                new Vec(0.7071, 0, -0.7071),
 //                new Vec(0, 1, 0),
@@ -60,79 +60,7 @@ public class RayTracer extends JPanel {
 
         scene = new Scene();
 
-        // Specify the objects in the scene.
-        scene.addShape(new Sphere(
-                new Vec(0, 0, 2.5),
-                0.5,
-                new Vec(255, 255, 255),
-                500,
-                0,
-                true,
-                1.5));
-
-        scene.addShape(new Sphere(
-                new Vec(0.6, 0.75, 5),
-                0.75,
-                new Vec(255, 0, 0),
-                500,
-                0.3,
-                false,
-                1));
-
-        scene.addShape(new Sphere(
-                new Vec(0.9, 0.9, 2),
-                0.3,
-                new Vec(255, 165, 0),
-                1000000,
-                0.3,
-                false,
-                1));
-
-        scene.addShape(new Sphere(
-                new Vec(-1, 0, 6),
-                0.75,
-                new Vec(255, 105, 180),
-                500,
-                0.3,
-                false,
-                1));
-
-        scene.addShape(new Sphere(
-                new Vec(0.75, -1, 7),
-                1,
-                new Vec(0, 128, 128),
-                500,
-                0.3,
-                false,
-                1));
-
-        scene.addShape(new Sphere(
-                new Vec(2, -0.5, 4),
-                1,
-                new Vec(0, 0, 255),
-                500,
-                0.3,
-                false,
-                1));
-
-        scene.addShape(new Sphere(
-                new Vec(-2, 0, 4),
-                1,
-                new Vec(0, 255, 0),
-                500,
-                0.3,
-                false,
-                1));
-
-        scene.addShape(new Sphere(
-                new Vec(-0.6, 1, 3),
-                0.4,
-                new Vec(255, 255, 255),
-                1000,
-                0.8,
-                false,
-                1));
-
+        // Bottom
         scene.addShape(new Sphere(
                 new Vec(0, -5001, 0),
                 5000,
@@ -142,31 +70,81 @@ public class RayTracer extends JPanel {
                 false,
                 1));
 
-//        // Right wall
-//        scene.addShape(new Sphere(
-//                new Vec(5004, 0, 0),
-//                5000,
-//                new Vec(204, 232, 255),
-//                100000000,
-//                0,
-//                false,
-//                1));
-
-        // Back wall
+        // Top
         scene.addShape(new Sphere(
-                new Vec(0, 0, 5009),
+                new Vec(0, 5001, 0),
                 5000,
-                new Vec(51, 65, 76),
+                new Vec(204, 232, 255),
                 100000000,
                 0,
                 false,
                 1));
 
+        // Back
+        scene.addShape(new Sphere(
+                new Vec(0, 0, 5005),
+                5000,
+                new Vec(204, 232, 255),
+                100000000,
+                0,
+                false,
+                1));
+
+        // Bottom
+        scene.addShape(new Sphere(
+                new Vec(0, 0, -5000),
+                5000,
+                new Vec(0, 0, 0),
+                100000000,
+                0,
+                false,
+                1));
+
+        // Right
+        scene.addShape(new Sphere(
+                new Vec(5001, 0, 0),
+                5000,
+                new Vec(65, 55, 100),
+                100000000,
+                0,
+                false,
+                1));
+
+        // Left
+        scene.addShape(new Sphere(
+                new Vec(-5001, 0, 0),
+                5000,
+                new Vec(100, 60, 70),
+                100000000,
+                0,
+                false,
+                1));
+
+        // Glass ball
+        scene.addShape(new Sphere(
+                new Vec(0.2, -0.3, 1),
+                0.1,
+                new Vec(255, 0, 0),
+                100,
+                0,
+                true,
+                1.5));
+
+        // Mirror
+        scene.addShape(new Sphere(
+                new Vec(-0.2, 0, 2),
+                0.2,
+                new Vec(255, 255, 255),
+                300,
+                1,
+                false,
+                1));
 
         // Specify the lighting in the scene.
         scene.addLight(new Ambient(0.2));
-        scene.addLight(new Point( 0.6, new Vec(2, 6, 0)));
+        scene.addLight(new Point( 0.6, new Vec(0, 0.8, 2)));
         scene.addLight(new Directional(0.2, new Vec(1, 4, 4)));
+//    Vec center, double radius, Vec color, int specular, double reflective, boolean transparent, double rIndex) {
 
         // Retrieve the lights and objects, and camera details..
         rt.objects = scene.getObjects();
@@ -250,13 +228,14 @@ public class RayTracer extends JPanel {
         closePoint = origin.add(direction.scale(closeIntersection));
         closeNormal = closePoint.sub(((Sphere) closestShape).getCenter());
         closeNormal = closeNormal.scale(1.0 / closeNormal.length());
-        localColor = closestShape.getColor().scale(computeLighting(closePoint, closeNormal, direction.scale(-1), closestShape.getSpecular()));
+        localColor = closestShape.getColor().scale(computeLighting(closePoint, closeNormal, direction, closestShape.getSpecular()));
+
 
         if (closestShape.getTransparent()) {
-//            reflective = reflectance(direction, closeNormal, rIndexAir, rIndex);
-//            transparent = 1 - reflective;
-            transparent = reflectance(direction, closeNormal, rIndexAir, rIndex);
-            reflective = 1 - transparent;
+            reflective = reflectance(direction, closeNormal, rIndexAir, rIndex);
+            transparent = 1 - reflective;
+//            transparent = reflectance(direction, closeNormal, rIndexAir, rIndex);
+//            reflective = 1 - transparent;
         } else {
             reflective = closestShape.getReflective();
             transparent = 0;
@@ -282,7 +261,7 @@ public class RayTracer extends JPanel {
             transparentColor = traceRay(refractedRay, 0.001, traceMax, recursionDepth- 1);
         }
 
-        return (localColor.scale(1 - reflective - transparent).add(reflectedColor.scale(reflective))).add(transparentColor.scale(transparent));
+        return ((localColor.scale(1 - reflective - transparent).add(reflectedColor.scale(reflective))).add(transparentColor.scale(transparent)));
     }
 
     public double reflectance(Vec I, Vec N, double n1, double n2) {
@@ -294,8 +273,8 @@ public class RayTracer extends JPanel {
 
         if (sin2t > 1.0) return 1.0;
 
-        rPerpendicular = Math.pow(((n1 * cosThetaI) - (n2 * cosThetaT) / (n1 * cosThetaI) + (n2 * cosThetaT)), 2);
-        rParallel = Math.pow(((n2 * cosThetaI) - (n1 * cosThetaT) / (n2 * cosThetaI) + (n1 * cosThetaT)), 2);
+        rPerpendicular = Math.pow((((n1 * cosThetaI) - (n2 * cosThetaT)) / ((n1 * cosThetaI) + (n2 * cosThetaT))), 2);
+        rParallel = Math.pow((((n2 * cosThetaI) - (n1 * cosThetaT)) / ((n2 * cosThetaI) + (n1 * cosThetaT))), 2);
 
         return (rPerpendicular + rParallel) / 2.0;
     }
@@ -357,8 +336,8 @@ public class RayTracer extends JPanel {
             if (light instanceof Ambient) {
                 i += light.getIntensity();
             } else {
-                if (light instanceof Point) l = (((Point) light).getPosition()).sub(point);
-                else l = ((Directional) light).getDirection();
+                if (light instanceof Point) l = (((Point) light).getPosition()).sub(point).normalise();
+                else l = ((Directional) light).getDirection().normalise();
 
                 // Shadow check
                 shadowRay = new Ray(point, l);

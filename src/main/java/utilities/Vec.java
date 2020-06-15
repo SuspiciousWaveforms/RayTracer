@@ -42,6 +42,7 @@ public class Vec {
 
         if (t != 0) return new Vec(vec[0] / t, vec[1] / t, vec[2] / t);
         else return new Vec(0, 0, 0);
+
     }
 
     public double dotProduct(Vec v) {

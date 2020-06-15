@@ -24,7 +24,7 @@ This is a simple ray tracer using the Phong lighting model developed to learn mo
 
 ## Planned Features
 - Change shadows under transparent objects
-- Implementation of fresnel equations
+- Soft Shadows
 - Other shapes
 - Parallelization
 - Value of caching

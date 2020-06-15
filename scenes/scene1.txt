@@ -1,22 +1,7 @@
-        // Specify the camera view.
-        rt.cameraDirection = new Vec(0, 0, -1);
-//        rt.cameraRotation = new Vec[]{
-//                new Vec(0.7071, 0, -0.7071),
-//                new Vec(0, 1, 0),
-//                new Vec(0.7071, 0, 0.7071)};
-        rt.cameraRotation = new Vec[]{
-                new Vec(0,0,0),
-                new Vec(0,0,0),
-                new Vec(0,0,0)};
-        camera = new Camera(rt.cameraDirection, rt.cameraRotation);
-
-        scene = new Scene();
-
-        // Specify the objects in the scene.
         scene.addShape(new Sphere(
                 new Vec(0, 0, 2.5),
                 0.5,
-                new Vec(255, 255, 255),
+                new Vec(0, 0, 0),
                 500,
                 0,
                 true,
@@ -85,6 +70,7 @@
                 false,
                 1));
 
+        // Bottom wall
         scene.addShape(new Sphere(
                 new Vec(0, -5001, 0),
                 5000,
@@ -94,28 +80,17 @@
                 false,
                 1));
 
-//        // Right wall
-//        scene.addShape(new Sphere(
-//                new Vec(5004, 0, 0),
-//                5000,
-//                new Vec(204, 232, 255),
-//                100000000,
-//                0,
-//                false,
-//                1));
-
         // Back wall
         scene.addShape(new Sphere(
                 new Vec(0, 0, 5009),
                 5000,
-                new Vec(255, 255, 0),
+                new Vec(51, 65, 76),
                 100000000,
                 0,
                 false,
                 1));
 
-
         // Specify the lighting in the scene.
         scene.addLight(new Ambient(0.2));
-        scene.addLight(new Point( 0.6, new Vec(2, 6, 0)));
+        scene.addLight(new Point( 0.6, new Vec(2, 5, 0)));
         scene.addLight(new Directional(0.2, new Vec(1, 4, 4)));
