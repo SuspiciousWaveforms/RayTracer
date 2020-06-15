@@ -90,7 +90,7 @@ public class RayTracer extends JPanel {
                 false,
                 1));
 
-        // Bottom
+        // Front
         scene.addShape(new Sphere(
                 new Vec(0, 0, -5000),
                 5000,
@@ -122,8 +122,8 @@ public class RayTracer extends JPanel {
 
         // Glass ball
         scene.addShape(new Sphere(
-                new Vec(0.2, -0.3, 1),
-                0.1,
+                new Vec(0.5, -0.5, 3),
+                0.7,
                 new Vec(255, 0, 0),
                 100,
                 0,
@@ -142,9 +142,8 @@ public class RayTracer extends JPanel {
 
         // Specify the lighting in the scene.
         scene.addLight(new Ambient(0.2));
-        scene.addLight(new Point( 0.6, new Vec(0, 0.8, 2)));
+        scene.addLight(new Point( 0.6, new Vec(0.2, 0.3, 1)));
         scene.addLight(new Directional(0.2, new Vec(1, 4, 4)));
-//    Vec center, double radius, Vec color, int specular, double reflective, boolean transparent, double rIndex) {
 
         // Retrieve the lights and objects, and camera details..
         rt.objects = scene.getObjects();
@@ -340,11 +339,11 @@ public class RayTracer extends JPanel {
                 else l = ((Directional) light).getDirection().normalise();
 
                 // Shadow check
-                shadowRay = new Ray(point, l);
-                closestShapeIntersections = getClosestShapeIntersections(shadowRay, 0.001, traceMax);
-                shadowSphere = closestShapeIntersections.getShape();
-
-                if (shadowSphere == null) {
+//                shadowRay = new Ray(point, l);
+//                closestShapeIntersections = getClosestShapeIntersections(shadowRay, 0.001, traceMax);
+//                shadowSphere = closestShapeIntersections.getShape();
+//
+//                if (shadowSphere == null) {
 
                     // Diffuse lighting.
                     nDotL = normal.dotProduct(l);
@@ -362,7 +361,7 @@ public class RayTracer extends JPanel {
                     }
                 }
             }
-        }
+//        }
 
         return i;
     }
