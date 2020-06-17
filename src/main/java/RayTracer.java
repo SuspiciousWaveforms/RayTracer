@@ -4,7 +4,7 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.JPanel;
@@ -25,8 +25,8 @@ import main.java.utilities.Vec;
 public class RayTracer extends JPanel {
     private BufferedImage canvas;
 
-    private ArrayList<Shape> objects;
-    private ArrayList<Light> lights;
+    private List<Shape> objects;
+    private List<Light> lights;
 
     Vec cameraDirection;
     Vec[] cameraRotation;
@@ -35,9 +35,9 @@ public class RayTracer extends JPanel {
     private int canvasWidth = 600;
     private int canvasHeight = 600;
     private final int traceMin = 1;
-    private final int traceMax = 1000000000;
+    private final int traceMax = 1_000_000_000;
     private final int recursionDepth = 3;
-    private final double rIndexAir = 1;
+    private static final double R_INDEX_AIR = 1;
 
     public static void main(String[] args) {
         RayTracer rt = new RayTracer();
@@ -231,10 +231,8 @@ public class RayTracer extends JPanel {
 
 
         if (closestShape.getTransparent()) {
-            reflective = reflectance(direction, closeNormal, rIndexAir, rIndex);
+            reflective = reflectance(direction, closeNormal, R_INDEX_AIR, rIndex);
             transparent = 1 - reflective;
-//            transparent = reflectance(direction, closeNormal, rIndexAir, rIndex);
-//            reflective = 1 - transparent;
         } else {
             reflective = closestShape.getReflective();
             transparent = 0;
@@ -248,7 +246,7 @@ public class RayTracer extends JPanel {
 
         // Compute refraction.
         if (recursionDepth > 0 && transparent > 0) {
-            refractedRay = new Ray(closePoint, refractRay(direction, closeNormal, rIndexAir, rIndex));
+            refractedRay = new Ray(closePoint, refractRay(direction, closeNormal, R_INDEX_AIR, rIndex));
 
             closestShapeIntersectionsRefraction = getClosestShapeIntersections(refractedRay, traceMin, traceMax);
             farIntersection = closestShapeIntersectionsRefraction.getCloseIntersection();
@@ -256,7 +254,7 @@ public class RayTracer extends JPanel {
             farNormal = (farPoint.sub(((Sphere) closestShape).getCenter())).scale(-1);
             farNormal = farNormal.scale(1.0 / farNormal.length());
 
-            refractedRay = new Ray(farPoint, refractRay(refractedRay.getDirection(), farNormal, rIndex, rIndexAir));
+            refractedRay = new Ray(farPoint, refractRay(refractedRay.getDirection(), farNormal, rIndex, R_INDEX_AIR));
             transparentColor = traceRay(refractedRay, 0.001, traceMax, recursionDepth- 1);
         }
 

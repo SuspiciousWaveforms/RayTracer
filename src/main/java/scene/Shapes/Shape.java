@@ -5,11 +5,19 @@ import main.java.rays.RayIntersections;
 import main.java.utilities.Vec;
 
 public abstract class Shape {
-    protected Vec color;
-    protected int specular;
-    protected double reflective;
-    protected boolean transparent;
-    protected double rIndex;
+    private Vec color;
+    private int specular;
+    private double reflective;
+    private boolean transparent;
+    private double rIndex;
+
+    Shape(Vec color, int specular, double reflective, boolean transparent, double rIndex) {
+        this.color = color;
+        this.specular = specular;
+        this.reflective = reflective;
+        this.transparent = transparent;
+        this.rIndex = rIndex;
+    }
 
     public abstract RayIntersections checkIntersect(Ray ray);
 

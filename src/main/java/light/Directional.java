@@ -6,7 +6,8 @@ public class Directional extends Light {
     private Vec direction;
 
     public Directional(double intensity, Vec direction) {
-        this.intensity = intensity;
+        super(intensity);
+
         this.direction = direction;
     }
 
@@ -14,3 +15,4 @@ public class Directional extends Light {
         return direction;
     }
 }
+

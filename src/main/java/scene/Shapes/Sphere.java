@@ -8,13 +8,10 @@ public class Sphere extends Shape {
     private double radius;
 
     public Sphere(Vec center, double radius, Vec color, int specular, double reflective, boolean transparent, double rIndex) {
+        super(color, specular, reflective, transparent, rIndex);
+
         this.center = center;
         this.radius = radius;
-        this.color = color;
-        this.specular = specular;
-        this.reflective = reflective;
-        this.transparent = transparent;
-        this.rIndex = rIndex;
     }
 
     // Check where ray intersects with the sphere and return intersections if any.

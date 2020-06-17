@@ -1,16 +1,14 @@
 package main.java.scene;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import main.java.light.Light;
 import main.java.scene.Shapes.Shape;
 
 public class Scene {
-    ArrayList<Shape> objects = new ArrayList<>();
-    ArrayList<Light> lights = new ArrayList<>();
-
-    public Scene() {
-    }
+    List<Shape> objects = new ArrayList<>();
+    List<Light> lights = new ArrayList<>();
 
     public void addShape(Shape shape) {
         objects.add(shape);
@@ -20,11 +18,12 @@ public class Scene {
         lights.add(light);
     }
 
-    public ArrayList<Shape> getObjects() {
+    public List<Shape> getObjects() {
         return objects;
     }
 
-    public ArrayList<Light> getLights() {
+    public List<Light> getLights() {
         return lights;
     }
 }
+
