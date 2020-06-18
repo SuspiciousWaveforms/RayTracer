@@ -22,6 +22,7 @@ import main.java.scene.Shapes.Shape;
 import main.java.scene.Shapes.Sphere;
 import main.java.utilities.Vec;
 
+public class RayTracer {
     private BufferedImage canvas;
 
     private List<Shape> objects;
