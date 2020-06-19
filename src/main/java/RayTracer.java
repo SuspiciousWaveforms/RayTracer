@@ -156,46 +156,46 @@ public class RayTracer {
 //        scene.addLight(new Point( 0.6, new Vec(2, 5, 0)));
 //        scene.addLight(new Directional(0.2, new Vec(1, 4, 4)));
 
-//        // Bottom
-//        scene.addShape(new Sphere(
-//                new Vec(0, -5001, 0),
-//                5000,
-//                new Vec(204, 232, 255),
-//                100000000,
-//                0,
-//                false,
-//                1));
-//
-//        // Top
-//        scene.addShape(new Sphere(
-//                new Vec(0, 5001, 0),
-//                5000,
-//                new Vec(204, 232, 255),
-//                100000000,
-//                0,
-//                false,
-//                1));
-//
-//        // Back
-//        scene.addShape(new Sphere(
-//                new Vec(0, 0, 5005),
-//                5000,
-//                new Vec(204, 232, 255),
-//                100000000,
-//                0,
-//                false,
-//                1));
-//
-//        // Front
-//        scene.addShape(new Sphere(
-//                new Vec(0, 0, -5000),
-//                5000,
-//                new Vec(0, 0, 0),
-//                100000000,
-//                0,
-//                false,
-//                1));6
-//
+        // Bottom
+        scene.addShape(new Sphere(
+                new Vec(0, -5001, 0),
+                5000,
+                new Vec(204, 232, 255),
+                100000000,
+                0,
+                false,
+                1));
+
+        // Top
+        scene.addShape(new Sphere(
+                new Vec(0, 5001, 0),
+                5000,
+                new Vec(204, 232, 255),
+                100000000,
+                0,
+                false,
+                1));
+
+        // Back
+        scene.addShape(new Sphere(
+                new Vec(0, 0, 5005),
+                5000,
+                new Vec(204, 232, 255),
+                100000000,
+                0,
+                false,
+                1));
+
+        // Front
+        scene.addShape(new Sphere(
+                new Vec(0, 0, -5000),
+                5000,
+                new Vec(0, 0, 0),
+                100000000,
+                0,
+                false,
+                1));
+
         // Right
         scene.addShape(new Sphere(
                 new Vec(5001, 0, 0),
@@ -247,7 +247,7 @@ public class RayTracer {
 
         // Specify the lighting in the scene.
         scene.addLight(new Ambient(0.2));
-        scene.addLight(new Point(0.6, new Vec(0.1, 0, 2)));
+        scene.addLight(new Point(0.6, new Vec(0.1, 0.8, 2)));
         scene.addLight(new Directional(0.8, new Vec(1, 4, 4)));
 
         // Retrieve the lights and objects, and camera details..
@@ -428,6 +428,7 @@ public class RayTracer {
         ClosestShapeIntersections closestShapeIntersections;
         Shape shadowSphere;
         Ray shadowRay;
+        double traceMax;
         Vec L, R;
 
         double i = 0.0;
@@ -438,8 +439,11 @@ public class RayTracer {
                 i += light.getIntensity();
             } else {
 //                if (light instanceof Point) L = (((Point) light).getPosition()).sub(P).normalise();
-                if (light instanceof Point) L = (((Point) light).getPosition()).sub(P).normalise();
-                else L = ((Directional) light).getDirection().normalise();
+                if (light instanceof Point) L = (((Point) light).getPosition()).sub(P);
+                else L = ((Directional) light).getDirection();
+
+                traceMax = L.length();
+                L = L.normalise();
 
                 // Shadow check
                 shadowRay = new Ray(P, L);
