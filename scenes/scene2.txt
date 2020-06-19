@@ -28,7 +28,7 @@
                 false,
                 1));
 
-        // Bottom
+        // Front
         scene.addShape(new Sphere(
                 new Vec(0, 0, -5000),
                 5000,
@@ -60,26 +60,34 @@
 
         // Glass ball
         scene.addShape(new Sphere(
-                new Vec(0.2, -0.3, 1),
-                0.1,
+                new Vec(0.4, -0.4, 3),
+                0.4,
                 new Vec(255, 0, 0),
-                100,
-                0,
-               true,
+                100, 0,
+                true,
                 1.5));
 
         // Mirror
         scene.addShape(new Sphere(
-                new Vec(-0.2, 0, 2),
-                0.2,
+                new Vec(-0.2, 0, 2.5),
+                0.3,
                 new Vec(255, 255, 255),
                 300,
                 1,
                 false,
                 1));
 
+        // light marker
+//        scene.addShape(new Sphere(
+//                new Vec(0.1, 0, 2),
+//                0.01,
+//                new Vec(255, 255, 0),
+//                300,
+//                0,
+//                false,
+//                1));
+
         // Specify the lighting in the scene.
         scene.addLight(new Ambient(0.2));
-//        scene.addLight(new Point( 0.6, new Vec(0, 3, 2)));
-//        scene.addLight(new Directional(0.2, new Vec(0, 4, 2)));
-
+        scene.addLight(new Point(0.6, new Vec(0, 1, 2.5)));
+        scene.addLight(new Directional(0.8, new Vec(1, 4, 4)));

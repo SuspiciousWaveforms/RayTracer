@@ -59,104 +59,79 @@ public class RayTracer {
 
         scene = new Scene();
 
-//        scene.addShape(new Sphere(
-//                new Vec(0, 0, 2.5),
-//                0.5,
-//                new Vec(0, 0, 0),
-//                500,
-//                0,
-//                true,
-//                1.5));
-//
-//        scene.addShape(new Sphere(
-//                new Vec(0.6, 0.75, 5),
-//                0.75,
-//                new Vec(255, 0, 0),
-//                500,
-//                0.3,
-//                false,
-//                1));
-//
-//        scene.addShape(new Sphere(
-//                new Vec(0.9, 0.9, 2),
-//                0.3,
-//                new Vec(255, 165, 0),
-//                1000000,
-//                0.3,
-//                false,
-//                1));
-//
-//        scene.addShape(new Sphere(
-//                new Vec(-1, 0, 6),
-//                0.75,
-//                new Vec(255, 105, 180),
-//                500,
-//                0.3,
-//                false,
-//                1));
-//
-//        scene.addShape(new Sphere(
-//                new Vec(0.75, -1, 7),
-//                1,
-//                new Vec(0, 128, 128),
-//                500,
-//                0.3,
-//                false,
-//                1));
-//
-//        scene.addShape(new Sphere(
-//                new Vec(2, -0.5, 4),
-//                1,
-//                new Vec(0, 0, 255),
-//                500,
-//                0.3,
-//                false,
-//                1));
-//
-//        scene.addShape(new Sphere(
-//                new Vec(-2, 0, 4),
-//                1,
-//                new Vec(0, 255, 0),
-//                500,
-//                0.3,
-//                false,
-//                1));
-//
-//        scene.addShape(new Sphere(
-//                new Vec(-0.6, 1, 3),
-//                0.4,
-//                new Vec(255, 255, 255),
-//                1000,
-//                0.8,
-//                false,
-//                1));
-//
-//        // Bottom wall
-//        scene.addShape(new Sphere(
-//                new Vec(0, -5001, 0),
-//                5000,
-//                new Vec(204, 232, 255),
-//                100000000,
-//                0,
-//                false,
-//                1));
-//
-//        // Back wall
-//        scene.addShape(new Sphere(
-//                new Vec(0, 0, 5009),
-//                5000,
-//                new Vec(51, 65, 76),
-//                100000000,
-//                0,
-//                false,
-//                1));
-//
-//        // Specify the lighting in the scene.
-//        scene.addLight(new Ambient(0.2));
-//        scene.addLight(new Point( 0.6, new Vec(2, 5, 0)));
-//        scene.addLight(new Directional(0.2, new Vec(1, 4, 4)));
+        scene.addShape(new Sphere(
+                new Vec(0, 0, 2.5),
+                0.5,
+                new Vec(0, 0, 0),
+                500,
+                0,
+                true,
+                1.5));
 
-        // Bottom
+        scene.addShape(new Sphere(
+                new Vec(0.6, 0.75, 5),
+                0.75,
+                new Vec(255, 0, 0),
+                500,
+                0.3,
+                false,
+                1));
+
+        scene.addShape(new Sphere(
+                new Vec(0.9, 0.9, 2),
+                0.3,
+                new Vec(255, 165, 0),
+                1000000,
+                0.3,
+                false,
+                1));
+
+        scene.addShape(new Sphere(
+                new Vec(-1, 0, 6),
+                0.75,
+                new Vec(255, 105, 180),
+                500,
+                0.3,
+                false,
+                1));
+
+        scene.addShape(new Sphere(
+                new Vec(0.75, -1, 7),
+                1,
+                new Vec(0, 128, 128),
+                500,
+                0.3,
+                false,
+                1));
+
+        scene.addShape(new Sphere(
+                new Vec(2, -0.5, 4),
+                1,
+                new Vec(0, 0, 255),
+                500,
+                0.3,
+                false,
+                1));
+
+        scene.addShape(new Sphere(
+                new Vec(-2, 0, 4),
+                1,
+                new Vec(0, 255, 0),
+                500,
+                0.3,
+                false,
+                1));
+
+        scene.addShape(new Sphere(
+                new Vec(-0.6, 1, 3),
+                0.4,
+                new Vec(255, 255, 255),
+                1000,
+                0.8,
+                false,
+                1));
+
+        // Bottom wall
         scene.addShape(new Sphere(
                 new Vec(0, -5001, 0),
                 5000,
@@ -166,89 +141,20 @@ public class RayTracer {
                 false,
                 1));
 
-        // Top
+        // Back wall
         scene.addShape(new Sphere(
-                new Vec(0, 5001, 0),
+                new Vec(0, 0, 5009),
                 5000,
-                new Vec(204, 232, 255),
+                new Vec(51, 65, 76),
                 100000000,
                 0,
                 false,
                 1));
-
-        // Back
-        scene.addShape(new Sphere(
-                new Vec(0, 0, 5005),
-                5000,
-                new Vec(204, 232, 255),
-                100000000,
-                0,
-                false,
-                1));
-
-        // Front
-        scene.addShape(new Sphere(
-                new Vec(0, 0, -5000),
-                5000,
-                new Vec(0, 0, 0),
-                100000000,
-                0,
-                false,
-                1));
-
-        // Right
-        scene.addShape(new Sphere(
-                new Vec(5001, 0, 0),
-                5000,
-                new Vec(65, 55, 100),
-                100000000,
-                0,
-                false,
-                1));
-
-        // Left
-        scene.addShape(new Sphere(
-                new Vec(-5001, 0, 0),
-                5000,
-                new Vec(100, 60, 70),
-                100000000,
-                0,
-                false,
-                1));
-
-        // Glass ball
-        scene.addShape(new Sphere(
-                new Vec(0.4, -0.4, 3),
-                0.4,
-                new Vec(255, 0, 0),
-                100, 0,
-                true,
-                1.5));
-
-        // Mirror
-        scene.addShape(new Sphere(
-                new Vec(-0.2, 0, 2),
-                0.2,
-                new Vec(255, 255, 255),
-                300,
-                1,
-                false,
-                1));
-
-        // light marker
-//        scene.addShape(new Sphere(
-//                new Vec(0.1, 0, 2),
-//                0.01,
-//                new Vec(255, 255, 0),
-//                300,
-//                0,
-//                false,
-//                1));
 
         // Specify the lighting in the scene.
         scene.addLight(new Ambient(0.2));
-        scene.addLight(new Point(0.6, new Vec(0.1, 0.8, 2)));
-        scene.addLight(new Directional(0.8, new Vec(1, 4, 4)));
+        scene.addLight(new Point( 0.6, new Vec(2, 5, 0)));
+        scene.addLight(new Directional(0.2, new Vec(1, 4, 4)));
 
         // Retrieve the lights and objects, and camera details..
         rt.objects = scene.getObjects();
