@@ -59,196 +59,196 @@ public class RayTracer {
 
         scene = new Scene();
 
-        scene.addShape(new Sphere(
-                new Vec(0, 0, 2.5),
-                0.5,
-                new Vec(0, 0, 0),
-                500,
-                0,
-                true,
-                1.5));
-
-        scene.addShape(new Sphere(
-                new Vec(0.6, 0.75, 5),
-                0.75,
-                new Vec(255, 0, 0),
-                500,
-                0.3,
-                false,
-                1));
-
-        scene.addShape(new Sphere(
-                new Vec(0.9, 0.9, 2),
-                0.3,
-                new Vec(255, 165, 0),
-                1000000,
-                0.3,
-                false,
-                1));
-
-        scene.addShape(new Sphere(
-                new Vec(-1, 0, 6),
-                0.75,
-                new Vec(255, 105, 180),
-                500,
-                0.3,
-                false,
-                1));
-
-        scene.addShape(new Sphere(
-                new Vec(0.75, -1, 7),
-                1,
-                new Vec(0, 128, 128),
-                500,
-                0.3,
-                false,
-                1));
-
-        scene.addShape(new Sphere(
-                new Vec(2, -0.5, 4),
-                1,
-                new Vec(0, 0, 255),
-                500,
-                0.3,
-                false,
-                1));
-
-        scene.addShape(new Sphere(
-                new Vec(-2, 0, 4),
-                1,
-                new Vec(0, 255, 0),
-                500,
-                0.3,
-                false,
-                1));
-
-        scene.addShape(new Sphere(
-                new Vec(-0.6, 1, 3),
-                0.4,
-                new Vec(255, 255, 255),
-                1000,
-                0.8,
-                false,
-                1));
-
-        // Bottom wall
-        scene.addShape(new Sphere(
-                new Vec(0, -5001, 0),
-                5000,
-                new Vec(204, 232, 255),
-                100000000,
-                0,
-                false,
-                1));
-
-        // Back wall
-        scene.addShape(new Sphere(
-                new Vec(0, 0, 5009),
-                5000,
-                new Vec(51, 65, 76),
-                100000000,
-                0,
-                false,
-                1));
-
-        // Specify the lighting in the scene.
-        scene.addLight(new Ambient(0.2));
-        scene.addLight(new Point( 0.6, new Vec(2, 5, 0)));
-        scene.addLight(new Directional(0.2, new Vec(1, 4, 4)));
-
-////        // Bottom
-////        scene.addShape(new Sphere(
-////                new Vec(0, -5001, 0),
-////                5000,
-////                new Vec(204, 232, 255),
-////                100000000,
-////                0,
-////                false,
-////                1));
-////
-////        // Top
-////        scene.addShape(new Sphere(
-////                new Vec(0, 5001, 0),
-////                5000,
-////                new Vec(204, 232, 255),
-////                100000000,
-////                0,
-////                false,
-////                1));
-////
-////        // Back
-////        scene.addShape(new Sphere(
-////                new Vec(0, 0, 5005),
-////                5000,
-////                new Vec(204, 232, 255),
-////                100000000,
-////                0,
-////                false,
-////                1));
-////
-////        // Front
-////        scene.addShape(new Sphere(
-////                new Vec(0, 0, -5000),
-////                5000,
-////                new Vec(0, 0, 0),
-////                100000000,
-////                0,
-////                false,
-////                1));
-////
-//        // Right
 //        scene.addShape(new Sphere(
-//                new Vec(5001, 0, 0),
-//                5000,
-//                new Vec(65, 55, 100),
-//                100000000,
+//                new Vec(0, 0, 2.5),
+//                0.5,
+//                new Vec(0, 0, 0),
+//                500,
 //                0,
-//                false,
-//                1));
-//
-//        // Left
-//        scene.addShape(new Sphere(
-//                new Vec(-5001, 0, 0),
-//                5000,
-//                new Vec(100, 60, 70),
-//                100000000,
-//                0,
-//                false,
-//                1));
-//
-//        // Glass ball
-//        scene.addShape(new Sphere(
-//                new Vec(0.4, -0.4, 3),
-//                0.4,
-//                new Vec(255, 0, 0),
-//                100, 0,
 //                true,
 //                1.5));
 //
-//        // Mirror
 //        scene.addShape(new Sphere(
-//                new Vec(-0.2, 0, 2),
-//                0.2,
-//                new Vec(255, 255, 255),
-//                300,
-//                1,
+//                new Vec(0.6, 0.75, 5),
+//                0.75,
+//                new Vec(255, 0, 0),
+//                500,
+//                0.3,
 //                false,
 //                1));
 //
-//        // light marker
-////        scene.addShape(new Sphere(
-////                new Vec(0.1, 0, 2),
-////                0.01,
-////                new Vec(255, 255, 0),
-////                300,
-////                0,
-////                false,
-////                1));
+//        scene.addShape(new Sphere(
+//                new Vec(0.9, 0.9, 2),
+//                0.3,
+//                new Vec(255, 165, 0),
+//                1000000,
+//                0.3,
+//                false,
+//                1));
+//
+//        scene.addShape(new Sphere(
+//                new Vec(-1, 0, 6),
+//                0.75,
+//                new Vec(255, 105, 180),
+//                500,
+//                0.3,
+//                false,
+//                1));
+//
+//        scene.addShape(new Sphere(
+//                new Vec(0.75, -1, 7),
+//                1,
+//                new Vec(0, 128, 128),
+//                500,
+//                0.3,
+//                false,
+//                1));
+//
+//        scene.addShape(new Sphere(
+//                new Vec(2, -0.5, 4),
+//                1,
+//                new Vec(0, 0, 255),
+//                500,
+//                0.3,
+//                false,
+//                1));
+//
+//        scene.addShape(new Sphere(
+//                new Vec(-2, 0, 4),
+//                1,
+//                new Vec(0, 255, 0),
+//                500,
+//                0.3,
+//                false,
+//                1));
+//
+//        scene.addShape(new Sphere(
+//                new Vec(-0.6, 1, 3),
+//                0.4,
+//                new Vec(255, 255, 255),
+//                1000,
+//                0.8,
+//                false,
+//                1));
+//
+//        // Bottom wall
+//        scene.addShape(new Sphere(
+//                new Vec(0, -5001, 0),
+//                5000,
+//                new Vec(204, 232, 255),
+//                100000000,
+//                0,
+//                false,
+//                1));
+//
+//        // Back wall
+//        scene.addShape(new Sphere(
+//                new Vec(0, 0, 5009),
+//                5000,
+//                new Vec(51, 65, 76),
+//                100000000,
+//                0,
+//                false,
+//                1));
 //
 //        // Specify the lighting in the scene.
 //        scene.addLight(new Ambient(0.2));
-//        scene.addLight(new Point(0.6, new Vec(0.1, 0, 2)));
+//        scene.addLight(new Point( 0.6, new Vec(2, 5, 0)));
 //        scene.addLight(new Directional(0.2, new Vec(1, 4, 4)));
+
+//        // Bottom
+//        scene.addShape(new Sphere(
+//                new Vec(0, -5001, 0),
+//                5000,
+//                new Vec(204, 232, 255),
+//                100000000,
+//                0,
+//                false,
+//                1));
+//
+//        // Top
+//        scene.addShape(new Sphere(
+//                new Vec(0, 5001, 0),
+//                5000,
+//                new Vec(204, 232, 255),
+//                100000000,
+//                0,
+//                false,
+//                1));
+//
+//        // Back
+//        scene.addShape(new Sphere(
+//                new Vec(0, 0, 5005),
+//                5000,
+//                new Vec(204, 232, 255),
+//                100000000,
+//                0,
+//                false,
+//                1));
+//
+//        // Front
+//        scene.addShape(new Sphere(
+//                new Vec(0, 0, -5000),
+//                5000,
+//                new Vec(0, 0, 0),
+//                100000000,
+//                0,
+//                false,
+//                1));6
+//
+        // Right
+        scene.addShape(new Sphere(
+                new Vec(5001, 0, 0),
+                5000,
+                new Vec(65, 55, 100),
+                100000000,
+                0,
+                false,
+                1));
+
+        // Left
+        scene.addShape(new Sphere(
+                new Vec(-5001, 0, 0),
+                5000,
+                new Vec(100, 60, 70),
+                100000000,
+                0,
+                false,
+                1));
+
+        // Glass ball
+        scene.addShape(new Sphere(
+                new Vec(0.4, -0.4, 3),
+                0.4,
+                new Vec(255, 0, 0),
+                100, 0,
+                true,
+                1.5));
+
+        // Mirror
+        scene.addShape(new Sphere(
+                new Vec(-0.2, 0, 2),
+                0.2,
+                new Vec(255, 255, 255),
+                300,
+                1,
+                false,
+                1));
+
+        // light marker
+//        scene.addShape(new Sphere(
+//                new Vec(0.1, 0, 2),
+//                0.01,
+//                new Vec(255, 255, 0),
+//                300,
+//                0,
+//                false,
+//                1));
+
+        // Specify the lighting in the scene.
+        scene.addLight(new Ambient(0.2));
+        scene.addLight(new Point(0.6, new Vec(0.1, 0, 2)));
+        scene.addLight(new Directional(0.2, new Vec(1, 4, 4)));
 
         // Retrieve the lights and objects, and camera details..
         rt.objects = scene.getObjects();
@@ -264,7 +264,7 @@ public class RayTracer {
         for (int x = -(rt.canvasWidth / 2) ; x < (rt.canvasWidth / 2); x++) {
             for (int y = -(rt.canvasHeight / 2); y < (rt.canvasHeight / 2); y++) {
 //                ray = new Ray(rt.cameraDirection, (rt.canvasToViewport(x, y)).mxV(rt.cameraRotation));
-                ray = new Ray(rt.cameraDirection, (rt.canvasToViewport(x, y)));
+                ray = new Ray(rt.cameraDirection, (rt.canvasToViewport(x, y)).normalise());
 
                 tempColor = (rt.traceRay(ray, rt.traceMin, rt.traceMax, rt.recursionDepth)).colorBind();
 
@@ -305,6 +305,7 @@ public class RayTracer {
         ClosestShapeIntersections closestShapeIntersections;
         ClosestShapeIntersections closestShapeIntersectionsRefraction;
         Shape closestShape;
+
         Vec closePoint, farPoint, closeNormal, farNormal, localColor;
         Vec reflectedColor = new Vec(0,0,0);
         Vec transparentColor = new Vec(0,0,0);
@@ -321,17 +322,16 @@ public class RayTracer {
         closestShapeIntersections = getClosestShapeIntersections(ray, traceMin, traceMax);
         closestShape = closestShapeIntersections.getShape();
         closeIntersection = closestShapeIntersections.getCloseIntersection();
+
         if (closestShape != null) {
             rIndex = closestShape.getRIndex();
         }
-//        farIntersection = closestShapeIntersections.getFarIntersection();
 
         if (closestShape == null) return backgroundColor;
 
         // Compute lighting.
         closePoint = origin.add(direction.scale(closeIntersection));
-        closeNormal = closePoint.sub(((Sphere) closestShape).getCenter());
-        closeNormal = closeNormal.normalise();
+        closeNormal = closePoint.sub(((Sphere) closestShape).getCenter()).normalise();
         localColor = closestShape.getColor().scale(computeLighting(closePoint, closeNormal, direction, closestShape.getSpecular()));
 
         if (closestShape.getTransparent()) {
@@ -422,46 +422,46 @@ public class RayTracer {
             }
         }
 
-        return new ClosestShapeIntersections(closestShape, closeIntersection, farIntersection);
+        if (closeIntersection < farIntersection) return new ClosestShapeIntersections(closestShape, closeIntersection, farIntersection);
+        else return new ClosestShapeIntersections(closestShape, farIntersection, closeIntersection);
     }
 
     // Compute the double to modify the lighting for a pixel to account for the lighting.
-    public double computeLighting(Vec point, Vec normal, Vec view, int specular) {
+    public double computeLighting(Vec P, Vec N, Vec D, int specular) {
         ClosestShapeIntersections closestShapeIntersections;
         Shape shadowSphere;
         Ray shadowRay;
-        Vec l, r;
+        Vec L, R;
 
         double i = 0.0;
-        double nDotL, rDotV;
+        double nDotL, rDotD;
 
         for (Light light : lights) {
             if (light instanceof Ambient) {
                 i += light.getIntensity();
             } else {
-                if (light instanceof Point) l = (((Point) light).getPosition()).sub(point).normalise();
-                else l = ((Directional) light).getDirection().normalise();
+//                if (light instanceof Point) L = (((Point) light).getPosition()).sub(P).normalise();
+                if (light instanceof Point) L = (((Point) light).getPosition()).sub(P).normalise();
+                else L = ((Directional) light).getDirection().normalise();
 
                 // Shadow check
-                shadowRay = new Ray(point, l);
+                shadowRay = new Ray(P, L);
                 closestShapeIntersections = getClosestShapeIntersections(shadowRay, 0.0001, traceMax);
                 shadowSphere = closestShapeIntersections.getShape();
 
                 if (shadowSphere == null) {
-//                    System.out.println("hello");
-
                     // Diffuse lighting.
-                    nDotL = normal.dotProduct(l);
+                    nDotL = N.dotProduct(L);
 
-                    if (nDotL > 0) i += (light.getIntensity()) * nDotL / (normal.length() * l.length());
+                    if (nDotL > 0) i += (light.getIntensity()) * nDotL / (N.length() * L.length());
 
                     // Specular lighting.
                     if (specular != -1) {
-                        r = reflectRay(l, normal);
-                        rDotV = r.dotProduct(view);
+                        R = reflectRay(L, N);
+                        rDotD = R.dotProduct(D);
 
-                        if (rDotV > 0) {
-                            i += light.getIntensity() * Math.pow(rDotV / (r.length() * view.length()), specular);
+                        if (rDotD > 0) {
+                            i += light.getIntensity() * Math.pow(rDotD / (R.length() * D.length()), specular);
                         }
                     }
                 }
