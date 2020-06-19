@@ -5,12 +5,10 @@ import main.java.scene.Shapes.Shape;
 public class ClosestShapeIntersections {
     private Shape shape;
     private double closeIntersection;
-    private double farIntersection;
 
-    public ClosestShapeIntersections(Shape shape, double closeIntersection, double farIntersection) {
+    public ClosestShapeIntersections(Shape shape, double closeIntersection) {
         this.shape = shape;
         this.closeIntersection = closeIntersection;
-        this.farIntersection = farIntersection;
     }
 
     public Shape getShape() {
@@ -19,9 +17,5 @@ public class ClosestShapeIntersections {
 
     public double getCloseIntersection() {
         return closeIntersection;
-    }
-
-    public double getFarIntersection() {
-        return farIntersection;
     }
 }

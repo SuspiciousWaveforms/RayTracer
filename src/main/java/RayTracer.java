@@ -248,7 +248,7 @@ public class RayTracer {
         // Specify the lighting in the scene.
         scene.addLight(new Ambient(0.2));
         scene.addLight(new Point(0.6, new Vec(0.1, 0, 2)));
-        scene.addLight(new Directional(0.2, new Vec(1, 4, 4)));
+        scene.addLight(new Directional(0.8, new Vec(1, 4, 4)));
 
         // Retrieve the lights and objects, and camera details..
         rt.objects = scene.getObjects();
@@ -397,7 +397,6 @@ public class RayTracer {
         RayIntersections rayIntersections;
 
         double closeIntersection = traceMax + 1;
-        double farIntersection = traceMax + 1;
         double intersection1;
         double intersection2;
 
@@ -411,19 +410,17 @@ public class RayTracer {
                 if (intersection1 >= traceMin && intersection1 <= traceMax && intersection1 < closeIntersection) {
                     closeIntersection = intersection1;
                     closestShape = shape;
-                    if (intersection2 >= traceMin && intersection2 <= traceMax) farIntersection = intersection2;
                 }
 
                 if (intersection2 >= traceMin && intersection2 <= traceMax && intersection2 < closeIntersection) {
                     closeIntersection = intersection2;
                     closestShape = shape;
-                    if (intersection1 >= traceMin && intersection1 <= traceMax) farIntersection = intersection1;
                 }
             }
         }
 
-        if (closeIntersection < farIntersection) return new ClosestShapeIntersections(closestShape, closeIntersection, farIntersection);
-        else return new ClosestShapeIntersections(closestShape, farIntersection, closeIntersection);
+        return new ClosestShapeIntersections(closestShape, closeIntersection);
+//        else return new ClosestShapeIntersections(closestShape, farIntersection, closeIntersection);
     }
 
     // Compute the double to modify the lighting for a pixel to account for the lighting.
