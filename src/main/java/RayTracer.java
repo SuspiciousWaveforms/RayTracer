@@ -160,7 +160,6 @@ public class RayTracer {
         scene.addLight(new Point( 0.6, new Vec(2, 5, 0)));
         scene.addLight(new Directional(0.2, new Vec(1, 4, 4)));
 
-
 //        // Bottom
 //        scene.addShape(new Sphere(
 //                new Vec(0, -5001, 0),
@@ -318,7 +317,7 @@ public class RayTracer {
         Vec direction = ray.getDirection();
         Ray reflectedRay, refractedRay;
 
-        double rIndex = -1;
+        Double rIndex = null;
         double reflective, transparent, closeIntersection, farIntersection;
 
         // Retrieve the data on the closest shape.
@@ -366,30 +365,60 @@ public class RayTracer {
         return ((localColor.scale(1 - reflective - transparent).add(reflectedColor.scale(reflective))).add(transparentColor.scale(transparent)));
     }
 
-    public double reflectance(Vec I, Vec N, double n1, double n2) {
-        double cosThetaI, cosThetaT, sin2t, rPerpendicular, rParallel;
+    // Compute the double to modify the lighting for a pixel to account for the lighting.
+    // P = point
+    // N = normal
+    // D = direction
+    public double computeLighting(Vec P, Vec N, Vec D, int specular) {
+        ClosestShapeIntersection closestShapeIntersections;
+        Shape shadowSphere;
+        Ray shadowRay;
 
-        cosThetaI = N.dotProduct(I.scale(-1));
-        sin2t = Math.pow((n1 / n2), 2) * (1 - Math.pow(cosThetaI, 2));
-        cosThetaT = Math.sqrt(1.0 - sin2t);
+        // L = light direction
+        // R = reflected ray direction
+        Vec L, R;
 
-        if (sin2t > 1.0) return 1.0;
+        double traceMax;
+        double nDotL, rDotD;
 
-        rPerpendicular = Math.pow((((n1 * cosThetaI) - (n2 * cosThetaT)) / ((n1 * cosThetaI) + (n2 * cosThetaT))), 2);
-        rParallel = Math.pow((((n2 * cosThetaI) - (n1 * cosThetaT)) / ((n2 * cosThetaI) + (n1 * cosThetaT))), 2);
+        // i = intensity
+        double i = 0.0;
 
-        return (rPerpendicular + rParallel) / 2.0;
-    }
+        for (Light light : lights) {
+            if (light instanceof Ambient) {
+                i += light.getIntensity();
+            } else {
+                if (light instanceof Point) L = (((Point) light).getPosition()).sub(P);
+                else L = ((Directional) light).getDirection();
 
-    // Return direction vector for reflected ray.
-    public Vec reflectRay(Vec I, Vec N) {
-        return ((N.scale(2)).scale(N.dotProduct(I.scale(-1)))).add(I);
-    }
+                traceMax = L.length();
+                L = L.normalise();
 
-    public Vec refractRay(Vec I, Vec N, double n1, double n2) {
-        double cosTheta = N.dotProduct(I.scale(-1));
-        double n = n1 / n2;
-        return I.scale(n).add(N.scale((n * cosTheta) - Math.sqrt(1 - (n * n * (1 - (cosTheta * cosTheta))))));
+                // Check whether point is in shadow
+                shadowRay = new Ray(P, L);
+                closestShapeIntersections = getClosestShapeIntersection(shadowRay, 0.001, traceMax);
+                shadowSphere = closestShapeIntersections.getShape();
+
+                if (shadowSphere == null) {
+                    // Diffuse lighting.
+                    nDotL = N.dotProduct(L);
+
+                    if (nDotL > 0) i += (light.getIntensity()) * nDotL / (N.length() * L.length());
+
+                    // Specular lighting.
+                    if (specular != -1) {
+                        R = reflectRay(L, N);
+                        rDotD = R.dotProduct(D);
+
+                        if (rDotD > 0) {
+                            i += light.getIntensity() * Math.pow(rDotD / (R.length() * D.length()), specular);
+                        }
+                    }
+                }
+            }
+        }
+
+        return i;
     }
 
     // Return the closest shape and the intersections of that shape and a ray.
@@ -424,52 +453,31 @@ public class RayTracer {
 //        else return new ClosestShapeIntersections(closestShape, farIntersection, closeIntersection);
     }
 
-    // Compute the double to modify the lighting for a pixel to account for the lighting.
-    public double computeLighting(Vec P, Vec N, Vec D, int specular) {
-        ClosestShapeIntersection closestShapeIntersections;
-        Shape shadowSphere;
-        Ray shadowRay;
-        double traceMax;
-        Vec L, R;
+    // Calculate how much light should be reflected at a particular intersection.
+    public double reflectance(Vec I, Vec N, double n1, double n2) {
+        double cosThetaI, cosThetaT, sin2t, rPerpendicular, rParallel;
 
-        double i = 0.0;
-        double nDotL, rDotD;
+        cosThetaI = N.dotProduct(I.scale(-1));
+        sin2t = Math.pow((n1 / n2), 2) * (1 - Math.pow(cosThetaI, 2));
+        cosThetaT = Math.sqrt(1.0 - sin2t);
 
-        for (Light light : lights) {
-            if (light instanceof Ambient) {
-                i += light.getIntensity();
-            } else {
-//                if (light instanceof Point) L = (((Point) light).getPosition()).sub(P).normalise();
-                if (light instanceof Point) L = (((Point) light).getPosition()).sub(P);
-                else L = ((Directional) light).getDirection();
+        if (sin2t > 1.0) return 1.0;
 
-                traceMax = L.length();
-                L = L.normalise();
+        rPerpendicular = Math.pow((((n1 * cosThetaI) - (n2 * cosThetaT)) / ((n1 * cosThetaI) + (n2 * cosThetaT))), 2);
+        rParallel = Math.pow((((n2 * cosThetaI) - (n1 * cosThetaT)) / ((n2 * cosThetaI) + (n1 * cosThetaT))), 2);
 
-                // Shadow check
-                shadowRay = new Ray(P, L);
-                closestShapeIntersections = getClosestShapeIntersection(shadowRay, 0.0001, traceMax);
-                shadowSphere = closestShapeIntersections.getShape();
+        return (rPerpendicular + rParallel) / 2.0;
+    }
 
-                if (shadowSphere == null) {
-                    // Diffuse lighting.
-                    nDotL = N.dotProduct(L);
+    // Calculate the direction vector for reflected ray.
+    public Vec reflectRay(Vec I, Vec N) {
+        return ((N.scale(2)).scale(N.dotProduct(I.scale(-1)))).add(I);
+    }
 
-                    if (nDotL > 0) i += (light.getIntensity()) * nDotL / (N.length() * L.length());
-
-                    // Specular lighting.
-                    if (specular != -1) {
-                        R = reflectRay(L, N);
-                        rDotD = R.dotProduct(D);
-
-                        if (rDotD > 0) {
-                            i += light.getIntensity() * Math.pow(rDotD / (R.length() * D.length()), specular);
-                        }
-                    }
-                }
-            }
-        }
-
-        return i;
+    // Calculate the direction vector for a refracted ray.
+    public Vec refractRay(Vec I, Vec N, double n1, double n2) {
+        double cosTheta = N.dotProduct(I.scale(-1));
+        double n = n1 / n2;
+        return I.scale(n).add(N.scale((n * cosTheta) - Math.sqrt(1 - (n * n * (1 - (cosTheta * cosTheta))))));
     }
 }
