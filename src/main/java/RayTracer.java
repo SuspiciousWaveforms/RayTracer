@@ -160,6 +160,101 @@ public class RayTracer {
         scene.addLight(new Point( 0.6, new Vec(2, 5, 0)));
         scene.addLight(new Directional(0.2, new Vec(1, 4, 4)));
 
+
+//        // Bottom
+//        scene.addShape(new Sphere(
+//                new Vec(0, -5001, 0),
+//                5000,
+//                new Vec(204, 232, 255),
+//                100000000,
+//                0,
+//                false,
+//                1));
+//
+//        // Top
+//        scene.addShape(new Sphere(
+//                new Vec(0, 5001, 0),
+//                5000,
+//                new Vec(204, 232, 255),
+//                100000000,
+//                0,
+//                false,
+//                1));
+//
+//        // Back
+//        scene.addShape(new Sphere(
+//                new Vec(0, 0, 5005),
+//                5000,
+//                new Vec(204, 232, 255),
+//                100000000,
+//                0,
+//                false,
+//                1));
+//
+//        // Front
+//        scene.addShape(new Sphere(
+//                new Vec(0, 0, -5000),
+//                5000,
+//                new Vec(0, 0, 0),
+//                100000000,
+//                0,
+//                false,
+//                1));
+//
+//        // Right
+//        scene.addShape(new Sphere(
+//                new Vec(5001, 0, 0),
+//                5000,
+//                new Vec(65, 55, 100),
+//                100000000,
+//                0,
+//                false,
+//                1));
+//
+//        // Left
+//        scene.addShape(new Sphere(
+//                new Vec(-5001, 0, 0),
+//                5000,
+//                new Vec(100, 60, 70),
+//                100000000,
+//                0,
+//                false,
+//                1));
+//
+//        // Glass ball
+//        scene.addShape(new Sphere(
+//                new Vec(0.4, -0.4, 3),
+//                0.4,
+//                new Vec(255, 0, 0),
+//                100, 0,
+//                true,
+//                1.5));
+//
+//        // Mirror
+//        scene.addShape(new Sphere(
+//                new Vec(-0.2, 0, 2.5),
+//                0.3,
+//                new Vec(255, 255, 255),
+//                300,
+//                1,
+//                false,
+//                1));
+
+        // light marker
+//        scene.addShape(new Sphere(
+//                new Vec(0.1, 0, 2),
+//                0.01,
+//                new Vec(255, 255, 0),
+//                300,
+//                0,
+//                false,
+//                1));
+
+//        // Specify the lighting in the scene.
+//        scene.addLight(new Ambient(0.2));
+//        scene.addLight(new Point(0.6, new Vec(0, 1, 2.5)));
+//        scene.addLight(new Directional(0.8, new Vec(1, 4, 4)));
+
         // Retrieve the lights and objects, and camera details..
         rt.objects = scene.getObjects();
         rt.lights = scene.getLights();
@@ -259,13 +354,10 @@ public class RayTracer {
         if (recursionDepth > 0 && transparent > 0) {
             refractedRay = new Ray(closePoint, refractRay(direction, closeNormal, R_INDEX_AIR, rIndex));
 
-            // Finds the closest intersection when fired from slightly in front of the close intersection
-            // giving the far intersection from the shape.
-            closestShapeIntersectionRefraction = getClosestShapeIntersection(refractedRay, traceMin, traceMax);
+            closestShapeIntersectionRefraction = getClosestShapeIntersection(refractedRay, 0.001, traceMax);
             farIntersection = closestShapeIntersectionRefraction.getClosestIntersection();
             farPoint = closePoint.add(refractedRay.getDirection().scale(farIntersection));
-            farNormal = (farPoint.sub(((Sphere) closestShape).getCenter())).scale(-1);
-            farNormal = farNormal.scale(1.0 / farNormal.length());
+            farNormal = (farPoint.sub(((Sphere) closestShape).getCenter())).scale(-1).normalise();
 
             refractedRay = new Ray(farPoint, refractRay(refractedRay.getDirection(), farNormal, rIndex, R_INDEX_AIR));
             transparentColor = traceRay(refractedRay, 0.001, traceMax, recursionDepth- 1);
