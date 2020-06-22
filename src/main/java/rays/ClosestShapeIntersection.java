@@ -15,7 +15,7 @@ public class ClosestShapeIntersection {
         return shape;
     }
 
-    public double getCloseIntersection() {
+    public double getClosestIntersection() {
         return closestIntersection;
     }
 }

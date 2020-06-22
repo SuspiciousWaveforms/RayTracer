@@ -229,7 +229,7 @@ public class RayTracer {
         // Retrieve the data on the closest shape.
         closestShapeIntersection = getClosestShapeIntersection(ray, traceMin, traceMax);
         closestShape = closestShapeIntersection.getShape();
-        closeIntersection = closestShapeIntersection.getCloseIntersection();
+        closeIntersection = closestShapeIntersection.getClosestIntersection();
 
         // No shapes intersect with this ray.
         if (closestShape == null) return backgroundColor;
@@ -239,6 +239,7 @@ public class RayTracer {
         closeNormal = closePoint.sub(((Sphere) closestShape).getCenter()).normalise();
         localColor = closestShape.getColor().scale(computeLighting(closePoint, closeNormal, direction, closestShape.getSpecular()));
 
+        // Compute how much light is reflected/transmitted.
         if (closestShape.isTransparent()) {
             rIndex = closestShape.getRIndex();
             reflective = reflectance(direction, closeNormal, R_INDEX_AIR, rIndex);
@@ -248,18 +249,20 @@ public class RayTracer {
             transparent = 0;
         }
 
-        // Compute reflection.
+        // Compute reflection color.
         if (recursionDepth > 0 && reflective > 0) {
             reflectedRay = new Ray(closePoint, reflectRay(direction, closeNormal));
             reflectedColor = traceRay(reflectedRay, 0.001, traceMax, recursionDepth - 1);
         }
 
-        // Compute refraction.
+        // Compute refraction color.
         if (recursionDepth > 0 && transparent > 0) {
             refractedRay = new Ray(closePoint, refractRay(direction, closeNormal, R_INDEX_AIR, rIndex));
 
+            // Finds the closest intersection when fired from slightly in front of the close intersection
+            // giving the far intersection from the shape.
             closestShapeIntersectionRefraction = getClosestShapeIntersection(refractedRay, traceMin, traceMax);
-            farIntersection = closestShapeIntersectionRefraction.getCloseIntersection();
+            farIntersection = closestShapeIntersectionRefraction.getClosestIntersection();
             farPoint = closePoint.add(refractedRay.getDirection().scale(farIntersection));
             farNormal = (farPoint.sub(((Sphere) closestShape).getCenter())).scale(-1);
             farNormal = farNormal.scale(1.0 / farNormal.length());
