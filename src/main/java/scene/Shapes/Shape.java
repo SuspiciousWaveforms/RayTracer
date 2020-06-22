@@ -33,7 +33,7 @@ public abstract class Shape {
         return reflective;
     }
 
-    public boolean getTransparent() {
+    public boolean isTransparent() {
         return transparent;
     }
 

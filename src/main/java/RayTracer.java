@@ -14,7 +14,7 @@ import main.java.light.Light;
 import main.java.light.Point;
 import main.java.rays.Ray;
 import main.java.rays.RayIntersections;
-import main.java.rays.ClosestShapeIntersections;
+import main.java.rays.ClosestShapeIntersection;
 import main.java.scene.Camera;
 import main.java.scene.Scene;
 import main.java.scene.Shapes.Shape;
@@ -24,26 +24,26 @@ import main.java.utilities.Vec;
 public class RayTracer {
     private BufferedImage canvas;
 
-    private List<Shape> objects;
-    private List<Light> lights;
-
-    Vec cameraDirection;
-    Vec[] cameraRotation;
-    Vec backgroundColor = new Vec(0, 0, 0);
-
-    private int canvasWidth = 600;
-    private int canvasHeight = 600;
+    private final int canvasWidth = 600;
+    private final int canvasHeight = 600;
     private final int traceMin = 1;
     private final int traceMax = 1_000_000_000;
     private final int recursionDepth = 3;
     private static final double R_INDEX_AIR = 1;
+
+    private Vec cameraDirection;
+    private Vec[] cameraRotation;
+    private Vec backgroundColor = new Vec(0, 0, 0);
+
+    private List<Shape> objects;
+    private List<Light> lights;
 
     public static void main(String[] args) {
         RayTracer rt = new RayTracer();
         Camera camera;
         Scene scene;
         Ray ray;
-        Vec tempColor;
+        Vec color;
 
         // Specify the camera view.
         rt.cameraDirection = new Vec(0, 0, 0);
@@ -51,14 +51,11 @@ public class RayTracer {
 //                new Vec(0.7071, 0, -0.7071),
 //                new Vec(0, 1, 0),
 //                new Vec(0.7071, 0, 0.7071)};
-        rt.cameraRotation = new Vec[]{
-                new Vec(0,0,0),
-                new Vec(0,0,0),
-                new Vec(0,0,0)};
         camera = new Camera(rt.cameraDirection, rt.cameraRotation);
 
         scene = new Scene();
 
+        // Glass sphere.
         scene.addShape(new Sphere(
                 new Vec(0, 0, 2.5),
                 0.5,
@@ -68,6 +65,7 @@ public class RayTracer {
                 true,
                 1.5));
 
+        // Red sphere.
         scene.addShape(new Sphere(
                 new Vec(0.6, 0.75, 5),
                 0.75,
@@ -75,8 +73,9 @@ public class RayTracer {
                 500,
                 0.3,
                 false,
-                1));
+                2.5));
 
+        // Gold sphere.
         scene.addShape(new Sphere(
                 new Vec(0.9, 0.9, 2),
                 0.3,
@@ -84,8 +83,9 @@ public class RayTracer {
                 1000000,
                 0.3,
                 false,
-                1));
+                2.5));
 
+        // Pink sphere.
         scene.addShape(new Sphere(
                 new Vec(-1, 0, 6),
                 0.75,
@@ -93,8 +93,9 @@ public class RayTracer {
                 500,
                 0.3,
                 false,
-                1));
+                2.5));
 
+        // Teal sphere.
         scene.addShape(new Sphere(
                 new Vec(0.75, -1, 7),
                 1,
@@ -104,6 +105,7 @@ public class RayTracer {
                 false,
                 1));
 
+        // Blue sphere.
         scene.addShape(new Sphere(
                 new Vec(2, -0.5, 4),
                 1,
@@ -111,8 +113,9 @@ public class RayTracer {
                 500,
                 0.3,
                 false,
-                1));
+                2.5));
 
+        // Green S
         scene.addShape(new Sphere(
                 new Vec(-2, 0, 4),
                 1,
@@ -122,14 +125,15 @@ public class RayTracer {
                 false,
                 1));
 
+        // Mirror sphere.
         scene.addShape(new Sphere(
                 new Vec(-0.6, 1, 3),
                 0.4,
                 new Vec(255, 255, 255),
                 1000,
-                0.8,
+                1,
                 false,
-                1));
+                2.5));
 
         // Bottom wall
         scene.addShape(new Sphere(
@@ -139,7 +143,7 @@ public class RayTracer {
                 100000000,
                 0,
                 false,
-                1));
+                2.5));
 
         // Back wall
         scene.addShape(new Sphere(
@@ -149,7 +153,7 @@ public class RayTracer {
                 100000000,
                 0,
                 false,
-                1));
+                2.5));
 
         // Specify the lighting in the scene.
         scene.addLight(new Ambient(0.2));
@@ -172,15 +176,15 @@ public class RayTracer {
 //                ray = new Ray(rt.cameraDirection, (rt.canvasToViewport(x, y)).mxV(rt.cameraRotation));
                 ray = new Ray(rt.cameraDirection, (rt.canvasToViewport(x, y)).normalise());
 
-                tempColor = (rt.traceRay(ray, rt.traceMin, rt.traceMax, rt.recursionDepth)).colorBind();
+                color = (rt.traceRay(ray, rt.traceMin, rt.traceMax, rt.recursionDepth)).colorBind();
 
                 rt.canvas.setRGB((
                         rt.canvasWidth / 2) + x,
                         (rt.canvasHeight / 2) - y - 1,
                         (new Color(
-                                (int) tempColor.getX(),
-                                (int) tempColor.getY(),
-                                (int) tempColor.getZ())).getRGB());
+                                (int) color.getX(),
+                                (int) color.getY(),
+                                (int) color.getZ())).getRGB());
             }
         }
 
@@ -208,8 +212,8 @@ public class RayTracer {
 
     // Return a color for a pixel on the canvas.
     public Vec traceRay(Ray ray, double traceMin, double traceMax, int recursionDepth) {
-        ClosestShapeIntersections closestShapeIntersections;
-        ClosestShapeIntersections closestShapeIntersectionsRefraction;
+        ClosestShapeIntersection closestShapeIntersection;
+        ClosestShapeIntersection closestShapeIntersectionRefraction;
         Shape closestShape;
 
         Vec closePoint, farPoint, closeNormal, farNormal, localColor;
@@ -219,20 +223,15 @@ public class RayTracer {
         Vec direction = ray.getDirection();
         Ray reflectedRay, refractedRay;
 
-        double reflective;
-        double rIndex = 1;
-        double transparent;
-        double closeIntersection, farIntersection;
+        double rIndex = -1;
+        double reflective, transparent, closeIntersection, farIntersection;
 
         // Retrieve the data on the closest shape.
-        closestShapeIntersections = getClosestShapeIntersections(ray, traceMin, traceMax);
-        closestShape = closestShapeIntersections.getShape();
-        closeIntersection = closestShapeIntersections.getCloseIntersection();
+        closestShapeIntersection = getClosestShapeIntersection(ray, traceMin, traceMax);
+        closestShape = closestShapeIntersection.getShape();
+        closeIntersection = closestShapeIntersection.getCloseIntersection();
 
-        if (closestShape != null) {
-            rIndex = closestShape.getRIndex();
-        }
-
+        // No shapes intersect with this ray.
         if (closestShape == null) return backgroundColor;
 
         // Compute lighting.
@@ -240,7 +239,8 @@ public class RayTracer {
         closeNormal = closePoint.sub(((Sphere) closestShape).getCenter()).normalise();
         localColor = closestShape.getColor().scale(computeLighting(closePoint, closeNormal, direction, closestShape.getSpecular()));
 
-        if (closestShape.getTransparent()) {
+        if (closestShape.isTransparent()) {
+            rIndex = closestShape.getRIndex();
             reflective = reflectance(direction, closeNormal, R_INDEX_AIR, rIndex);
             transparent = 1 - reflective;
         } else {
@@ -258,8 +258,8 @@ public class RayTracer {
         if (recursionDepth > 0 && transparent > 0) {
             refractedRay = new Ray(closePoint, refractRay(direction, closeNormal, R_INDEX_AIR, rIndex));
 
-            closestShapeIntersectionsRefraction = getClosestShapeIntersections(refractedRay, traceMin, traceMax);
-            farIntersection = closestShapeIntersectionsRefraction.getCloseIntersection();
+            closestShapeIntersectionRefraction = getClosestShapeIntersection(refractedRay, traceMin, traceMax);
+            farIntersection = closestShapeIntersectionRefraction.getCloseIntersection();
             farPoint = closePoint.add(refractedRay.getDirection().scale(farIntersection));
             farNormal = (farPoint.sub(((Sphere) closestShape).getCenter())).scale(-1);
             farNormal = farNormal.scale(1.0 / farNormal.length());
@@ -298,7 +298,7 @@ public class RayTracer {
     }
 
     // Return the closest shape and the intersections of that shape and a ray.
-    public ClosestShapeIntersections getClosestShapeIntersections(Ray ray, double traceMin, double traceMax) {
+    public ClosestShapeIntersection getClosestShapeIntersection(Ray ray, double traceMin, double traceMax) {
         Shape closestShape = null;
         RayIntersections rayIntersections;
 
@@ -325,13 +325,13 @@ public class RayTracer {
             }
         }
 
-        return new ClosestShapeIntersections(closestShape, closeIntersection);
+        return new ClosestShapeIntersection(closestShape, closeIntersection);
 //        else return new ClosestShapeIntersections(closestShape, farIntersection, closeIntersection);
     }
 
     // Compute the double to modify the lighting for a pixel to account for the lighting.
     public double computeLighting(Vec P, Vec N, Vec D, int specular) {
-        ClosestShapeIntersections closestShapeIntersections;
+        ClosestShapeIntersection closestShapeIntersections;
         Shape shadowSphere;
         Ray shadowRay;
         double traceMax;
@@ -353,7 +353,7 @@ public class RayTracer {
 
                 // Shadow check
                 shadowRay = new Ray(P, L);
-                closestShapeIntersections = getClosestShapeIntersections(shadowRay, 0.0001, traceMax);
+                closestShapeIntersections = getClosestShapeIntersection(shadowRay, 0.0001, traceMax);
                 shadowSphere = closestShapeIntersections.getShape();
 
                 if (shadowSphere == null) {
