@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Random;
 
 import javax.imageio.ImageIO;
 
@@ -399,6 +400,26 @@ public class RayTracer {
                 closestShapeIntersections = getClosestShapeIntersection(shadowRay, 0.001, traceMax);
                 shadowSphere = closestShapeIntersections.getShape();
 
+                double div = 0;
+                double tot = 0;
+                Ray tempShadowRay;
+                ClosestShapeIntersection tempClosestShapeIntersection;
+                Shape tempShadowSphere;
+
+                // Attempted soft shadows
+//                for (double j = -0.01; j < 0.01; j = j + 0.01) {
+//                    for (double k = -0.01; k < 0.01; k = k + 0.01) {
+//                        for (double l = -0.01; l < 0.01; l = l + 0.01) {
+//                            div = div + 1;
+//                            tempShadowRay = new Ray(P, L.add(new Vec(j, k, l)));
+//                            tempClosestShapeIntersection = getClosestShapeIntersection(tempShadowRay, 0.001, traceMax);
+//                            tempShadowSphere = tempClosestShapeIntersection.getShape();
+//                            if (tempShadowSphere != null) tot = tot + 1;
+//                        }
+//                    }
+//                }
+//                double li = tot / div;
+
                 if (shadowSphere == null) {
                     // Diffuse lighting.
                     nDotL = N.dotProduct(L);
@@ -414,7 +435,10 @@ public class RayTracer {
                             i += light.getIntensity() * Math.pow(rDotD / (R.length() * D.length()), specular);
                         }
                     }
+
+//                    i = i * (1 - li);
                 }
+
             }
         }
 
