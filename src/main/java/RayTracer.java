@@ -354,12 +354,14 @@ public class RayTracer {
         if (recursionDepth > 0 && transparent > 0) {
             refractedRay = new Ray(closePoint, refractRay(direction, closeNormal, R_INDEX_AIR, rIndex));
 
-            closestShapeIntersectionRefraction = getClosestShapeIntersection(refractedRay, 0.001, traceMax);
-            farIntersection = closestShapeIntersectionRefraction.getClosestIntersection();
-            farPoint = closePoint.add(refractedRay.getDirection().scale(farIntersection));
-            farNormal = (farPoint.sub(((Sphere) closestShape).getCenter())).scale(-1).normalise();
+            if (closestShape.isThreeDimensional()) {
+                closestShapeIntersectionRefraction = getClosestShapeIntersection(refractedRay, 0.001, traceMax);
+                farIntersection = closestShapeIntersectionRefraction.getClosestIntersection();
+                farPoint = closePoint.add(refractedRay.getDirection().scale(farIntersection));
+                farNormal = (farPoint.sub(((Sphere) closestShape).getCenter())).scale(-1).normalise();
+                refractedRay = new Ray(farPoint, refractRay(refractedRay.getDirection(), farNormal, rIndex, R_INDEX_AIR));
+            }
 
-            refractedRay = new Ray(farPoint, refractRay(refractedRay.getDirection(), farNormal, rIndex, R_INDEX_AIR));
             transparentColor = traceRay(refractedRay, 0.001, traceMax, recursionDepth- 1);
         }
 
@@ -400,11 +402,11 @@ public class RayTracer {
                 closestShapeIntersections = getClosestShapeIntersection(shadowRay, 0.001, traceMax);
                 shadowSphere = closestShapeIntersections.getShape();
 
-                double div = 0;
-                double tot = 0;
-                Ray tempShadowRay;
-                ClosestShapeIntersection tempClosestShapeIntersection;
-                Shape tempShadowSphere;
+//                double div = 0;
+//                double tot = 0;
+//                Ray tempShadowRay;
+//                ClosestShapeIntersection tempClosestShapeIntersection;
+//                Shape tempShadowSphere;
 
                 // Attempted soft shadows
 //                for (double j = -0.01; j < 0.01; j = j + 0.01) {
@@ -420,7 +422,7 @@ public class RayTracer {
 //                }
 //                double li = tot / div;
 
-                if (shadowSphere == null) {
+                    if (shadowSphere == null) {
                     // Diffuse lighting.
                     nDotL = N.dotProduct(L);
 

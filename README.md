@@ -29,7 +29,6 @@ This is a simple ray tracer using the Phong lighting model developed to learn mo
 - Refraction
 
 ## Planned Features
-- Change shadows under transparent objects
 - Soft Shadows
 - Other shapes
 - Parallelization

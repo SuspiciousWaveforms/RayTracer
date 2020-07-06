@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/RayTracer.iml" filepath="$PROJECT_DIR$/RayTracer.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../book-project/book-project.iml" filepath="$PROJECT_DIR$/../book-project/book-project.iml" />
     </modules>
   </component>
 </project>

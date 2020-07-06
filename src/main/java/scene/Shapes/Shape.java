@@ -10,13 +10,15 @@ public abstract class Shape {
     private double reflective;
     private boolean transparent;
     private double rIndex;
+    private boolean threeDimensional;
 
-    Shape(Vec color, int specular, double reflective, boolean transparent, double rIndex) {
+    Shape(Vec color, int specular, double reflective, boolean transparent, double rIndex, boolean threeDimensional) {
         this.color = color;
         this.specular = specular;
         this.reflective = reflective;
         this.transparent = transparent;
         this.rIndex = rIndex;
+        this.threeDimensional = threeDimensional;
     }
 
     public abstract RayIntersections checkIntersect(Ray ray);
@@ -39,5 +41,9 @@ public abstract class Shape {
 
     public double getRIndex() {
         return rIndex;
+    }
+
+    public boolean isThreeDimensional() {
+        return threeDimensional;
     }
 }

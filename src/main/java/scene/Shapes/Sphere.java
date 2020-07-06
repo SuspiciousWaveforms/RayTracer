@@ -8,7 +8,7 @@ public class Sphere extends Shape {
     private double radius;
 
     public Sphere(Vec center, double radius, Vec color, int specular, double reflective, boolean transparent, double rIndex) {
-        super(color, specular, reflective, transparent, rIndex);
+        super(color, specular, reflective, transparent, rIndex, true);
 
         this.center = center;
         this.radius = radius;
